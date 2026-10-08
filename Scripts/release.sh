@@ -86,17 +86,23 @@ if ! xcodebuild -project Declutter.xcodeproj -scheme "$SCHEME" -showBuildSetting
   CONFIGURATION="Release"
 fi
 
-xcodebuild archive \
-  -project Declutter.xcodeproj \
-  -scheme "$SCHEME" \
-  -configuration "$CONFIGURATION" \
-  -archivePath "$ARCHIVE_PATH" \
-  -derivedDataPath "$DERIVED_DATA" \
-  -destination 'generic/platform=macOS' \
-  CODE_SIGN_IDENTITY="$CODESIGN_IDENTITY" \
-  OTHER_CODE_SIGN_FLAGS="--timestamp" \
-  ONLY_ACTIVE_ARCH=NO \
-  | tail -5
+ARCHIVE_CMD=(
+  xcodebuild archive
+  -project Declutter.xcodeproj
+  -scheme "$SCHEME"
+  -configuration "$CONFIGURATION"
+  -archivePath "$ARCHIVE_PATH"
+  -derivedDataPath "$DERIVED_DATA"
+  -destination 'generic/platform=macOS'
+  CODE_SIGN_IDENTITY="$CODESIGN_IDENTITY"
+  ONLY_ACTIVE_ARCH=NO
+)
+
+if [ "$CODESIGN_IDENTITY" != "-" ]; then
+  ARCHIVE_CMD+=(OTHER_CODE_SIGN_FLAGS="--timestamp")
+fi
+
+"${ARCHIVE_CMD[@]}"
 
 echo "  ✓ Archive created at $ARCHIVE_PATH"
 

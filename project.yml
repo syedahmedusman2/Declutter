@@ -31,9 +31,6 @@ configs:
 packages:
   DeclutterCore:
     path: Packages/DeclutterCore
-  Sparkle:
-    url: https://github.com/sparkle-project/Sparkle
-    version: 2.7.0
 
 targets:
   Declutter:
@@ -47,11 +44,6 @@ targets:
           - Support/App-Direct.entitlements
     dependencies:
       - package: DeclutterCore
-      - package: Sparkle
-        # Sparkle is linked in all configs but only enabled at runtime via
-        # SPARKLE_ENABLED build setting / compiler flag. The Release-AppStore
-        # config strips it via EXCLUDED_SOURCE_FILE_NAMES if desired, but
-        # linking it without calling it is harmless and simpler for XcodeGen.
     settings:
       base:
         PRODUCT_NAME: $(APP_DISPLAY_NAME)
@@ -67,17 +59,11 @@ targets:
         LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks
         INFOPLIST_KEY_CFBundleDisplayName: $(APP_DISPLAY_NAME)
         INFOPLIST_KEY_LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
-        # Sparkle auto-update support (keyed per config below)
-        SPARKLE_ENABLED: "0"
-        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited)
       configs:
         Release-Direct:
-          CODE_SIGN_ENTITLEMENTS: App/Support/App-Direct.entitlements
-          SPARKLE_ENABLED: "1"
-          SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) SPARKLE_ENABLED
+          CODE_SIGN_ENTITLEMENTS: App/Support/App.entitlements
         Release-AppStore:
-          # No Sparkle, no network entitlement
-          SPARKLE_ENABLED: "0"
+          CODE_SIGN_ENTITLEMENTS: App/Support/App.entitlements
 
   DeclutterTests:
     type: bundle.unit-test
