@@ -49,6 +49,7 @@ struct RootView: View {
             }
             .navigationTitle(AppBranding.name)
             .listStyle(.sidebar)
+            .navigationSplitViewColumnWidth(min: 200, ideal: 220, max: 280)
             .safeAreaInset(edge: .bottom) {
                 SidebarStatusCard(model: model)
             }
