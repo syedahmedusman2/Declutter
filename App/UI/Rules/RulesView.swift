@@ -7,21 +7,38 @@ struct RulesView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if let banner = model.banner {
-                Label(banner, systemImage: model.isReadOnly ? "lock" : "exclamationmark.triangle")
-                    .font(.callout)
-                    .padding(10)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.quaternary)
+                HStack(spacing: 8) {
+                    Image(systemName: model.isReadOnly ? "lock.fill" : "exclamationmark.triangle.fill")
+                        .foregroundStyle(model.isReadOnly ? Color.secondary : Color.orange)
+                    Text(banner)
+                        .font(.callout)
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(.quaternary.opacity(0.5))
+                Divider()
             }
+
             if let sampleSummary = model.sampleSummary {
-                Text(sampleSummary)
-                    .font(.callout)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.quaternary.opacity(0.4))
-                    .accessibilityLabel(sampleSummary)
+                HStack(spacing: 8) {
+                    Image(systemName: "doc.badge.gearshape.fill")
+                        .foregroundStyle(.blue)
+                    Text(sampleSummary)
+                        .font(.callout)
+                    Spacer()
+                    Button("Clear") {
+                        model.sampleSummary = nil
+                    }
+                    .buttonStyle(.borderless)
+                    .font(.caption)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(.blue.opacity(0.08))
+                Divider()
             }
+
             list
         }
         .navigationTitle("Rules")
@@ -67,26 +84,58 @@ struct RulesView: View {
 
     private var list: some View {
         List(selection: $model.selection) {
-            Section("Priority") {
-                ForEach(model.specific) { category in
-                    row(category, warnings: warningsByCategory[category.id] ?? [])
-                        .tag(category.id)
-                }
-                .onMove { offsets, destination in
-                    model.move(from: offsets, to: destination)
+            if !model.specific.isEmpty {
+                Section {
+                    ForEach(model.specific) { category in
+                        row(category, warnings: warningsByCategory[category.id] ?? [])
+                            .tag(category.id)
+                    }
+                    .onMove { offsets, destination in
+                        model.move(from: offsets, to: destination)
+                    }
+                } header: {
+                    HStack {
+                        Text("PRIORITY RULES")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text("Evaluated top-to-bottom")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(.top, 4)
                 }
             }
-            Section("Catch-all, always last") {
-                ForEach(model.catchAlls) { category in
-                    row(category, warnings: warningsByCategory[category.id] ?? [])
-                        .tag(category.id)
+
+            if !model.catchAlls.isEmpty {
+                Section {
+                    ForEach(model.catchAlls) { category in
+                        row(category, warnings: warningsByCategory[category.id] ?? [])
+                            .tag(category.id)
+                    }
+                } header: {
+                    HStack {
+                        Text("CATCH-ALL")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text("Always evaluated last")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(.top, 4)
                 }
             }
         }
+        .listStyle(.inset(alternatesRowBackgrounds: true))
         .accessibilityLabel("Categories in priority order")
         .overlay {
             if model.categories.isEmpty {
-                ContentUnavailableView("No Categories", systemImage: "list.bullet", description: Text("Add a category or apply a preset."))
+                ContentUnavailableView(
+                    "No Categories",
+                    systemImage: "list.bullet.rectangle",
+                    description: Text("Add a category or apply a preset to begin sorting files.")
+                )
             }
         }
     }
@@ -95,28 +144,77 @@ struct RulesView: View {
         Dictionary(grouping: OverlapDetector().detect(categories: model.categories), by: \.categoryID)
     }
 
+    private func categoryColor(for category: OrganizerCategory) -> Color {
+        let name = category.name.lowercased()
+        if name.contains("image") || name.contains("photo") { return .purple }
+        if name.contains("video") || name.contains("movie") { return .pink }
+        if name.contains("music") || name.contains("audio") { return .red }
+        if name.contains("archive") || name.contains("zip") { return .orange }
+        if name.contains("doc") || name.contains("pdf") || name.contains("word") { return .blue }
+        if name.contains("text") { return .indigo }
+        if name.contains("code") || name.contains("developer") { return .teal }
+        if name.contains("sheet") || name.contains("excel") || name.contains("number") { return .green }
+        return .cyan
+    }
+
     private func row(_ category: OrganizerCategory, warnings: [OverlapWarning]) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: category.iconSymbol)
-                .frame(width: 22)
+        HStack(alignment: .center, spacing: 14) {
+            // Icon Pill
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .fill(categoryColor(for: category).gradient)
+                .frame(width: 34, height: 34)
+                .overlay {
+                    Image(systemName: category.iconSymbol)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.white)
+                }
+                .shadow(color: categoryColor(for: category).opacity(0.2), radius: 2, y: 1)
                 .accessibilityHidden(true)
+
+            // Texts & Metadata
             VStack(alignment: .leading, spacing: 3) {
-                Text(category.name)
-                    .font(.headline)
+                HStack(spacing: 8) {
+                    Text(category.name)
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(category.enabled ? .primary : .secondary)
+
+                    if category.isCatchAll {
+                        Text("Catch-All")
+                            .font(.caption2.weight(.medium))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Capsule().fill(.quaternary))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
                 Text(RuleSummary.listSummary(for: category))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                Text(category.destination.path)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                ForEach(warnings) { warning in
-                    Label(warning.message, systemImage: "exclamationmark.triangle")
+                    .lineLimit(1)
+
+                HStack(spacing: 8) {
+                    Label(category.destination.path, systemImage: "folder")
                         .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    ForEach(warnings) { warning in
+                        HStack(spacing: 3) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                            Text(warning.message)
+                        }
+                        .font(.caption2.weight(.medium))
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 1.5)
+                        .background(Capsule().fill(Color.orange.opacity(0.15)))
                         .foregroundStyle(.orange)
                         .accessibilityLabel(warning.message)
+                    }
                 }
             }
+
             Spacer(minLength: 8)
+
             Toggle(
                 "Enabled",
                 isOn: Binding(
@@ -125,10 +223,13 @@ struct RulesView: View {
                 )
             )
             .labelsHidden()
+            .toggleStyle(.switch)
+            .controlSize(.mini)
             .disabled(model.isReadOnly)
             .accessibilityLabel("\(category.name) enabled")
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 6)
+        .opacity(category.enabled ? 1.0 : 0.55)
         .contentShape(Rectangle())
         .draggable(category.id.uuidString)
         .dropDestination(for: String.self) { items, _ in
@@ -158,30 +259,56 @@ struct RulesView: View {
 
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        ToolbarItemGroup {
-            Button("Add", systemImage: "plus") { model.addCategory() }
-                .disabled(model.isReadOnly)
-                .accessibilityLabel("New category")
-                .accessibilityHint("Keyboard shortcut Command N.")
-            Button("Edit") { model.editSelected() }
-                .disabled(model.selection == nil)
-            Button("Duplicate") { model.duplicateSelected() }
-                .disabled(model.selection == nil || model.isReadOnly)
-            Button("Delete", systemImage: "trash") { model.deleteSelected() }
-                .disabled(model.selection == nil || model.isReadOnly)
-                .keyboardShortcut(.delete, modifiers: .command)
-            Button("Test") { model.editSelected() }
-                .disabled(model.selection == nil)
-                .accessibilityHint("Opens the category and the Test Rule panel.")
-            Button("Check Sample") { model.chooseSampleFile() }
-                .accessibilityHint("Uses a real file to see which categories match. Overlap warnings are best-effort.")
-            Menu("Presets") {
+        ToolbarItemGroup(placement: .primaryAction) {
+            Button {
+                model.addCategory()
+            } label: {
+                Label("Add Category", systemImage: "plus")
+            }
+            .disabled(model.isReadOnly)
+            .help("Create new category (⌘N)")
+
+            Button {
+                model.editSelected()
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+            .disabled(model.selection == nil)
+            .help("Edit selected rule")
+
+            Button {
+                model.duplicateSelected()
+            } label: {
+                Label("Duplicate", systemImage: "plus.square.on.square")
+            }
+            .disabled(model.selection == nil || model.isReadOnly)
+            .help("Duplicate selected rule")
+
+            Button(role: .destructive) {
+                model.deleteSelected()
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+            .disabled(model.selection == nil || model.isReadOnly)
+            .keyboardShortcut(.delete, modifiers: .command)
+            .help("Delete selected rule (⌘Delete)")
+
+            Button {
+                model.chooseSampleFile()
+            } label: {
+                Label("Check Sample", systemImage: "doc.badge.gearshape")
+            }
+            .help("Test a real file to see which rule matches")
+
+            Menu {
                 ForEach(CategoryPreset.allCases) { preset in
                     Button(preset.title) { model.pendingPreset = preset }
                 }
+            } label: {
+                Label("Presets", systemImage: "slider.horizontal.3")
             }
             .disabled(model.isReadOnly)
-            .accessibilityLabel("Apply a preset")
+            .help("Apply a rule preset")
         }
     }
 

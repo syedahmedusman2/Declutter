@@ -62,27 +62,43 @@ struct PreviewView: View {
     }
 
     private var header: some View {
-        HStack(alignment: .firstTextBaseline) {
-            VStack(alignment: .leading, spacing: 4) {
+        HStack(alignment: .center) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(model.folderPath ?? "No folder selected")
                     .font(.headline)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
                     .textSelection(.enabled)
                 Text(statusLine)
-                    .font(.subheadline)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
             }
             Spacer()
             Button("Select All") { model.selectAll() }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
                 .disabled(visibleRows.isEmpty || model.isPlanning)
             Button("Select None") { model.selectNone() }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
                 .disabled(model.selection.isEmpty || model.isPlanning)
-            Button("Refresh") {
+            Button {
                 Task { await model.refresh() }
+            } label: {
+                Label("Refresh", systemImage: "arrow.clockwise")
             }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
             .disabled(model.isPlanning || model.isExecuting)
-            Button("Execute") { model.requestExecute() }
-                .disabled(!model.canExecute)
-                .accessibilityHint("Keyboard shortcut Command Return. Asks before moving when the batch is large or a file would be replaced.")
+            Button {
+                model.requestExecute()
+            } label: {
+                Label("Execute Moves", systemImage: "arrow.right.circle.fill")
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(!model.canExecute)
+            .keyboardShortcut(.return, modifiers: .command)
+            .help("Execute file organization moves (⌘Return)")
         }
     }
 

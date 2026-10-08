@@ -5,8 +5,9 @@ struct ScanView: View {
     var onPreview: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 14) {
             header
+            Divider()
             content
         }
         .padding(16)
@@ -28,27 +29,55 @@ struct ScanView: View {
     }
 
     private var header: some View {
-        HStack(alignment: .firstTextBaseline) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(model.folderPath ?? "No folder selected")
-                    .font(.headline)
-                    .textSelection(.enabled)
-                    .accessibilityLabel(model.folderPath ?? "No folder selected")
-                Text(statusLine)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .accessibilityLabel(statusLine)
+        HStack(alignment: .center) {
+            HStack(spacing: 12) {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(Color.blue.gradient)
+                    .frame(width: 38, height: 38)
+                    .overlay {
+                        Image(systemName: "folder.fill")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(.white)
+                    }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(model.folderPath ?? "No folder selected")
+                        .font(.headline)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                        .textSelection(.enabled)
+
+                    Text(statusLine)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
+
             Spacer()
-            Button("Preview") {
-                onPreview()
-            }
-            .disabled(model.folderPath == nil || model.isScanning)
-            Button("Choose Folder") {
+
+            Button {
                 Task { await model.chooseFolderAndScan() }
+            } label: {
+                Label("Choose Folder", systemImage: "folder.badge.gearshape")
             }
+            .buttonStyle(.bordered)
             .disabled(model.isScanning)
-            .keyboardShortcut(.defaultAction)
+
+            Button {
+                Task { await model.rescan() }
+            } label: {
+                Label("Rescan", systemImage: "arrow.clockwise")
+            }
+            .buttonStyle(.bordered)
+            .disabled(model.folderPath == nil || model.isScanning)
+
+            Button {
+                onPreview()
+            } label: {
+                Label("Preview Plan", systemImage: "checklist")
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(model.folderPath == nil || model.isScanning || model.rows.isEmpty)
         }
     }
 
@@ -59,24 +88,52 @@ struct ScanView: View {
                 Task { await model.chooseFolderAndScan() }
             }
         } else if model.isScanning {
-            ProgressView("Scanning")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            VStack(spacing: 12) {
+                ProgressView()
+                    .controlSize(.regular)
+                Text("Scanning folder...")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if model.rows.isEmpty {
             ContentUnavailableView(
-                model.folderPath == nil ? "Choose a Folder" : "No Files",
-                systemImage: "folder",
+                model.folderPath == nil ? "Choose a Folder" : "Folder Clean",
+                systemImage: model.folderPath == nil ? "folder.badge.questionmark" : "sparkles",
                 description: Text(
                     model.folderPath == nil
-                        ? "The chooser opens in Downloads. Files are listed with a category. Nothing is moved."
-                        : "Hidden files, folders, partial downloads, and links are skipped."
+                        ? "Select a folder like Downloads or Desktop to see matching categories."
+                        : "No unorganized files found matching current active rules."
                 )
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
             Table(model.rows) {
-                TableColumn("File", value: \.name)
-                TableColumn("Category", value: \.categoryName)
-                TableColumn("Destination", value: \.destinationPath)
+                TableColumn("File") { row in
+                    HStack(spacing: 8) {
+                        Image(systemName: "doc")
+                            .foregroundStyle(.secondary)
+                        Text(row.name)
+                            .lineLimit(1)
+                    }
+                }
+                TableColumn("Category") { row in
+                    Text(row.categoryName)
+                        .font(.caption.weight(.medium))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Capsule().fill(.quaternary))
+                }
+                TableColumn("Destination") { row in
+                    HStack(spacing: 4) {
+                        Image(systemName: "arrow.turn.down.right")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                        Text(row.destinationPath)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
         }
     }
@@ -84,6 +141,6 @@ struct ScanView: View {
     private var statusLine: String {
         if model.isScanning { return "Scanning…" }
         if model.folderPath == nil { return "Pick a folder to see each file’s category." }
-        return "\(model.rows.count) files"
+        return "\(model.rows.count) files ready to organize"
     }
 }

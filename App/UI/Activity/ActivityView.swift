@@ -60,6 +60,7 @@ struct ActivityView: View {
                         }
                     }
                 }
+                .listStyle(.inset(alternatesRowBackgrounds: true))
                 .accessibilityLabel("History grouped by day")
             }
         }
@@ -67,10 +68,29 @@ struct ActivityView: View {
     }
 
     private var stats: some View {
-        Text("Organized \(model.stats.totalOrganized). Today \(model.stats.organizedToday). Skipped \(model.stats.skipped). Failed \(model.stats.failed).")
-            .font(.subheadline)
-            .foregroundStyle(.secondary)
-            .accessibilityLabel("Organized \(model.stats.totalOrganized). Today \(model.stats.organizedToday). Skipped \(model.stats.skipped). Failed \(model.stats.failed).")
+        HStack(spacing: 8) {
+            statPill(label: "Total Organized", count: model.stats.totalOrganized, color: .purple)
+            statPill(label: "Today", count: model.stats.organizedToday, color: .blue)
+            statPill(label: "Skipped", count: model.stats.skipped, color: .secondary)
+            if model.stats.failed > 0 {
+                statPill(label: "Failed", count: model.stats.failed, color: .red)
+            }
+            Spacer()
+        }
+    }
+
+    private func statPill(label: String, count: Int, color: Color) -> some View {
+        HStack(spacing: 5) {
+            Text(label)
+                .font(.caption2.weight(.medium))
+                .foregroundStyle(.secondary)
+            Text("\(count)")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(color)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(Capsule().fill(.quaternary.opacity(0.6)))
     }
 
     private var filters: some View {

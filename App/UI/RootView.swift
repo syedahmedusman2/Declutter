@@ -33,16 +33,6 @@ struct RootView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            MonitorBar(model: model)
-            Divider()
-            split
-        }
-        .respectReduceMotion()
-        .preferredColorScheme(model.settings.colorScheme)
-    }
-
-    private var split: some View {
         NavigationSplitView {
             List(selection: $section) {
                 Label("Dashboard", systemImage: "gauge")
@@ -59,6 +49,9 @@ struct RootView: View {
             }
             .navigationTitle(AppBranding.name)
             .listStyle(.sidebar)
+            .safeAreaInset(edge: .bottom) {
+                SidebarStatusCard(model: model)
+            }
         } detail: {
             switch section ?? .dashboard {
             case .dashboard:
