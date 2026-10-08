@@ -1,4 +1,4 @@
-import DownloadOrganizerCore
+import DeclutterCore
 import SwiftUI
 
 struct SettingsView: View {
@@ -301,7 +301,7 @@ private struct HistoryTab: View {
     }
 
     private func exportConfig() {
-        guard let url = FolderPicker.save(title: "Export Configuration", name: "download-organizer-config.json", ext: "json") else { return }
+        guard let url = FolderPicker.save(title: "Export Configuration", name: "declutter-config.json", ext: "json") else { return }
         do {
             let stored = try model.environment.categories.load()
             let categories = stored?.categories ?? DefaultCategories.make()
@@ -347,7 +347,7 @@ private struct HistoryTab: View {
     }
 
     private func exportDiagnostics() {
-        guard let url = FolderPicker.save(title: "Export Diagnostics", name: "download-organizer-diagnostics.zip", ext: "zip") else { return }
+        guard let url = FolderPicker.save(title: "Export Diagnostics", name: "declutter-diagnostics.zip", ext: "zip") else { return }
         Task {
             do {
                 let history = try await model.environment.history.query(HistoryQuery(limit: 50))

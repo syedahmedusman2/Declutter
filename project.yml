@@ -1,7 +1,7 @@
-name: DownloadOrganizer
+name: Declutter
 
 options:
-  bundleIdPrefix: com.example
+  bundleIdPrefix: com.declutterapp
   deploymentTarget:
     macOS: "14.0"
   createIntermediateGroups: true
@@ -19,8 +19,8 @@ settings:
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: "1"
     # Keep these aligned with App/AppBranding.swift.
-    PRODUCT_BUNDLE_IDENTIFIER: com.example.downloadorganizer
-    APP_DISPLAY_NAME: Download Organizer
+    PRODUCT_BUNDLE_IDENTIFIER: com.declutterapp.declutter
+    APP_DISPLAY_NAME: Declutter
 
 configs:
   Debug: debug
@@ -29,14 +29,14 @@ configs:
   Release-AppStore: release   # Mac App Store — no Sparkle
 
 packages:
-  DownloadOrganizerCore:
-    path: Packages/DownloadOrganizerCore
+  DeclutterCore:
+    path: Packages/DeclutterCore
   Sparkle:
     url: https://github.com/sparkle-project/Sparkle
     version: 2.7.0
 
 targets:
-  DownloadOrganizer:
+  Declutter:
     type: application
     platform: macOS
     sources:
@@ -46,7 +46,7 @@ targets:
           - Support/App.entitlements
           - Support/App-Direct.entitlements
     dependencies:
-      - package: DownloadOrganizerCore
+      - package: DeclutterCore
       - package: Sparkle
         # Sparkle is linked in all configs but only enabled at runtime via
         # SPARKLE_ENABLED build setting / compiler flag. The Release-AppStore
@@ -55,7 +55,7 @@ targets:
     settings:
       base:
         PRODUCT_NAME: $(APP_DISPLAY_NAME)
-        PRODUCT_MODULE_NAME: DownloadOrganizer
+        PRODUCT_MODULE_NAME: Declutter
         PRODUCT_BUNDLE_IDENTIFIER: $(PRODUCT_BUNDLE_IDENTIFIER)
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: App/Support/Info.plist
@@ -79,16 +79,16 @@ targets:
           # No Sparkle, no network entitlement
           SPARKLE_ENABLED: "0"
 
-  DownloadOrganizerTests:
+  DeclutterTests:
     type: bundle.unit-test
     platform: macOS
     sources:
-      - path: Tests/DownloadOrganizerTests
+      - path: Tests/DeclutterTests
     dependencies:
-      - target: DownloadOrganizer
+      - target: Declutter
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.example.downloadorganizer.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.declutterapp.declutter.tests
         GENERATE_INFOPLIST_FILE: YES
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/$(APP_DISPLAY_NAME).app/Contents/MacOS/$(APP_DISPLAY_NAME)"
         BUNDLE_LOADER: "$(TEST_HOST)"
@@ -97,17 +97,17 @@ targets:
         ENABLE_HARDENED_RUNTIME: YES
 
 schemes:
-  DownloadOrganizer:
+  Declutter:
     build:
       targets:
-        DownloadOrganizer: all
-        DownloadOrganizerTests: [test]
+        Declutter: all
+        DeclutterTests: [test]
     run:
       config: Debug
     test:
       config: Debug
       targets:
-        - DownloadOrganizerTests
+        - DeclutterTests
     profile:
       config: Release
     analyze:

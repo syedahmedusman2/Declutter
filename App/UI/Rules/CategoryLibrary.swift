@@ -1,8 +1,8 @@
-import DownloadOrganizerCore
+import DeclutterCore
 import Foundation
 import Observation
 
-typealias OrganizerCategory = DownloadOrganizerCore.Category
+typealias OrganizerCategory = DeclutterCore.Category
 
 @MainActor
 @Observable

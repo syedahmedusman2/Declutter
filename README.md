@@ -1,146 +1,172 @@
 <p align="center">
-  <img src="assets/app-icon.png" alt="Download Organizer" width="128" height="128">
+  <img src="assets/app-icon.png" alt="Declutter" width="128" height="128">
 </p>
 
-<h1 align="center">Download Organizer</h1>
+<h1 align="center">Declutter</h1>
 
 <p align="center">
-  <strong>Automatically organize your Downloads folder on macOS.</strong><br>
-  Rules-based file sorting · Background monitoring · Full undo · Menu bar app
-</p>
-
-<p align="center">
-  <a href="https://github.com/OWNER/REPO/releases/latest"><img src="https://img.shields.io/github/v/release/OWNER/REPO?style=flat-square&label=Download&color=6366f1" alt="Download latest"></a>
-  <img src="https://img.shields.io/badge/macOS-14%2B-000?style=flat-square&logo=apple&logoColor=white" alt="macOS 14+">
-  <img src="https://img.shields.io/badge/Swift-6-F05138?style=flat-square&logo=swift&logoColor=white" alt="Swift 6">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="MIT License"></a>
+  <strong>Intelligent, privacy-first file organization for macOS.</strong><br>
+  Sort your Downloads, Desktop, or any messy folder automatically with smart rules, live preview, and instant undo.
 </p>
 
 <p align="center">
-  <img src="assets/screenshot.png" alt="Download Organizer screenshot" width="720">
+  <a href="https://github.com/OWNER/declutter/releases/latest"><img src="https://img.shields.io/github/v/release/OWNER/declutter?style=for-the-badge&label=Download&color=6366f1" alt="Download latest"></a>
+  <img src="https://img.shields.io/badge/macOS-14%2B%20Sonoma%20%2F%20Sequoia-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS 14+">
+  <img src="https://img.shields.io/badge/Swift-6.0-F05138?style=for-the-badge&logo=swift&logoColor=white" alt="Swift 6">
+  <img src="https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge" alt="MIT License">
+  <img src="https://img.shields.io/badge/Privacy-100%25%20Offline-blueviolet?style=for-the-badge" alt="100% Offline">
+</p>
+
+<p align="center">
+  <img src="assets/screenshot.png" alt="Declutter Interface" width="760">
 </p>
 
 ---
 
-## What it does
+## ✨ Highlights
 
-Download Organizer watches your Downloads folder (or any folder you choose) and sorts files into subfolders based on rules you define — file type, name patterns, size, dates, and more.
+Declutter runs quietly in the background or on demand to keep your workspaces pristine. Rather than treating all folders like a generic junk drawer, Declutter puts you in control with precise, transparent rules.
 
-- **📂 Smart categories** — Built-in presets for Documents, Images, Videos, Archives, Music, Code, and more. Or create your own.
-- **👁 Background monitoring** — Watches for new downloads and organizes them automatically.
-- **↩️ Full undo** — Every move is tracked. Undo a single file or an entire batch.
-- **🔍 Preview before moving** — See exactly what will happen before confirming.
-- **📌 Menu bar** — Lives in your menu bar. Runs silently in the background.
-- **🔒 Private** — No account. No network. No analytics. Everything stays on your Mac.
+| Feature | Description |
+|:---|:---|
+| 📂 **Any Folder** | Watch Downloads, Desktop, Screenshots, or custom working directories. |
+| 🏷️ **Smart Categorization** | Sort by file type, extension, regex, creation/modification dates, file size, and more. |
+| 👁️ **Live Monitoring** | FSEvents background daemon with stability checking so files are never moved mid-download. |
+| ↩️ **Atomic Undo** | Every move is journaled. Revert single files or roll back entire batches in one click. |
+| 🔍 **Dry Run & Preview** | Preview destination paths, detect rule conflicts, and verify moves before touching disk. |
+| ⚡ **Menu Bar Companion** | Discreet menu bar extra gives instant status, pause/resume toggling, and quick scans. |
+| 🛡️ **100% Offline & Private** | Zero telemetry, zero analytics, zero network requests. Your files and metadata never leave your Mac. |
 
-## Download
+---
 
-### DMG (recommended)
+## 🚀 Quick Start & Download
 
-1. Go to the [**latest release**](https://github.com/OWNER/REPO/releases/latest)
-2. Download `DownloadOrganizer-x.x.x.dmg`
-3. Open the DMG and drag **Download Organizer** into your Applications folder
-4. Launch from Applications
+### Option 1: Direct Download (DMG)
 
-> **First launch:** macOS will show a security warning because the app is not notarized yet. To open it:
-> - **Right-click** (or Control-click) the app → **Open** → click **Open** again
->
-> Or run this once in Terminal:
-> ```bash
-> xattr -dr com.apple.quarantine "/Applications/Download Organizer.app"
-> ```
+1. Head over to [**Latest Releases**](https://github.com/OWNER/declutter/releases/latest).
+2. Download `Declutter-0.1.0.dmg`.
+3. Open the DMG and drag **Declutter** to your **Applications** folder.
+4. Launch **Declutter** from Applications or Spotlight.
 
-### Homebrew (coming soon)
+> [!TIP]
+> **First-Launch Gatekeeper Notice (for Ad-Hoc Builds):**
+> Because this open-source build is distributed directly without a paid Apple Developer certificate, macOS Gatekeeper may show a verification prompt on first open.
+> - **Method A:** Right-click (or Control-click) **Declutter.app** → click **Open** → confirm **Open**.
+> - **Method B (Terminal):**
+>   ```bash
+>   xattr -dr com.apple.quarantine /Applications/Declutter.app
+>   ```
+
+---
+
+### Option 2: Homebrew Cask (Coming Soon)
 
 ```bash
-brew install --cask download-organizer
+brew install --cask declutter
 ```
 
-## How to use
+---
 
-1. **First launch** → Onboarding asks you to pick a folder (defaults to `~/Downloads`)
-2. **Set up categories** → Use the built-in presets or create custom rules
-3. **Preview** → Click "Preview" to see what will be moved and where
-4. **Organize** → Confirm to move files, or enable background monitoring to do it automatically
-5. **Undo** → Changed your mind? Undo any move from the Activity tab
+## 🎯 How It Works
 
-## System requirements
+```
+📁 Source Folder (e.g. ~/Downloads)
+       │
+       ▼
+   [File Scanner] ───► Evaluates Rules (Type, Extension, Size, Date, Regex)
+       │
+       ├───► [Live Preview] ───► Review proposed destinations & conflicts
+       │
+       ▼
+   [Move Engine] ──────► Atomic file relocation with journal logging
+       │
+       ▼
+   [Full Undo] ────────► Undo any move at any time from Activity Log
+```
 
-| | Requirement |
-|---|---|
-| **macOS** | 14 (Sonoma) or later |
-| **Chip** | Apple Silicon or Intel |
-| **Storage** | ~15 MB |
+1. **Pick Folders:** Select `~/Downloads`, `~/Desktop`, or custom paths via secure macOS bookmarks.
+2. **Choose or Compose Rules:** Use pre-packaged presets (Documents, Images, Archives, Code, Videos, Audio) or create custom logic with nested conditions.
+3. **Scan & Confirm:** Preview planned moves with transparent match explanations.
+4. **Automate:** Switch on background monitoring for hands-free sorting.
 
-## Building from source
+---
 
-Prerequisites: [Xcode 16+](https://developer.apple.com/xcode/) and [XcodeGen](https://github.com/yonaskolb/XcodeGen).
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+|:---|:---|
+| <kbd>⌘</kbd> + <kbd>N</kbd> | Create New Category |
+| <kbd>⌘</kbd> + <kbd>R</kbd> | Rescan Monitored Folder |
+| <kbd>⌘</kbd> + <kbd>Return</kbd> | Execute Organization Batch |
+| <kbd>⌘</kbd> + <kbd>F</kbd> | Search Rules & Files |
+| <kbd>⌥</kbd> + <kbd>⌘</kbd> + <kbd>P</kbd> | Pause / Resume Background Watcher |
+| <kbd>⌘</kbd> + <kbd>Z</kbd> | Undo Last Batch |
+
+---
+
+## 💻 Building From Source
+
+### Prerequisites
+- macOS 14.0 (Sonoma) or later
+- [Xcode 16+](https://developer.apple.com/xcode/)
+- [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`)
+
+### Build Steps
 
 ```bash
-# Install XcodeGen
-brew install xcodegen
+# 1. Clone repository
+git clone https://github.com/OWNER/declutter.git
+cd declutter
 
-# Clone and build
-git clone https://github.com/OWNER/REPO.git
-cd DownloadOrganizer
+# 2. Generate Xcode project
 xcodegen generate
-xcodebuild -scheme DownloadOrganizer -destination 'platform=macOS' build
+
+# 3. Build with xcodebuild (or open Declutter.xcodeproj in Xcode)
+xcodebuild -project Declutter.xcodeproj -scheme Declutter -destination 'platform=macOS' build
 ```
 
-Or open the generated `DownloadOrganizer.xcodeproj` in Xcode and press ⌘R.
+### Run Package Tests
 
-### Run tests
+All business logic, classification engines, and file monitors are headless and testable via SwiftPM:
 
 ```bash
-swift test --package-path Packages/DownloadOrganizerCore
+swift test --package-path Packages/DeclutterCore
 ```
-
-## Project structure
-
-```
-DownloadOrganizer/
-├── App/                          # SwiftUI app target (thin shell)
-│   ├── UI/                       # Views, organized by feature
-│   ├── Resources/                # Assets, localization
-│   └── Support/                  # Info.plist, entitlements
-├── Packages/DownloadOrganizerCore/
-│   └── Sources/                  # All logic — testable without UI
-│       ├── Domain/               # Models
-│       ├── Rules/                # Rule engine, classification
-│       ├── FileSystem/           # Scanner, organizer, conflict resolver
-│       ├── Monitoring/           # FSEvents watcher, stability checker
-│       └── History/              # Move history, undo
-├── Scripts/                      # Build & release automation
-└── .github/workflows/            # CI and release pipelines
-```
-
-All core logic lives in the `DownloadOrganizerCore` Swift package so it can be tested headlessly with `swift test`. The app target is a thin SwiftUI shell.
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-feature`)
-3. Make sure tests pass (`swift test --package-path Packages/DownloadOrganizerCore`)
-4. Open a Pull Request
-
-## Privacy
-
-Download Organizer is **completely offline**. It does not:
-- Collect any data
-- Make any network requests (except checking for updates, if enabled)
-- Require any account or sign-in
-- Read file contents — it only reads file metadata (name, size, dates, type)
-
-Your files never leave your Mac.
-
-## License
-
-[MIT](LICENSE)
 
 ---
 
-<p align="center">
-  Made with ☕ for a cleaner Downloads folder.
-</p>
+## 🏗️ Architecture
+
+```
+Declutter/
+├── App/                      # SwiftUI app & menu bar interface
+│   ├── UI/                   # Views: Dashboard, Rules, Preview, Activity, Settings
+│   ├── Monitoring/           # App lifecycle, notifications, settings
+│   └── Support/              # Entitlements, Info.plist
+├── Packages/
+│   └── DeclutterCore/        # Pure Swift package with 100% UI-free logic
+│       ├── Sources/
+│       │   ├── Domain/       # Category, Rule, and File models
+│       │   ├── Rules/        # AST evaluation, overlap detection, presets
+│       │   ├── FileSystem/   # Safe move engine, conflict resolvers, scanner
+│       │   ├── Monitoring/   # FSEvents stream with download stability checks
+│       │   └── History/      # Journaling and rollback undo manager
+│       └── Tests/            # Comprehensive unit and integration test suite
+├── Scripts/                  # Release packaging, appcast, and DMG tooling
+└── .github/workflows/        # Automated CI and release pipelines
+```
+
+---
+
+## 🔒 Privacy & Security
+
+Declutter was built from the ground up on privacy-by-design principles:
+- **No Analytics / No Tracking:** Zero tracking SDKs or telemetry.
+- **Local Metadata Only:** The app inspects filenames, extensions, byte sizes, and timestamps. It never inspects, uploads, or modifies the contents of your files.
+- **App Sandbox & Hardened Runtime:** Respects macOS security boundaries with user-granted directory bookmarks.
+
+---
+
+## 📄 License
+
+Distributed under the [MIT License](LICENSE).

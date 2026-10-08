@@ -1,5 +1,5 @@
 import XCTest
-@testable import DownloadOrganizerCore
+@testable import DeclutterCore
 
 final class ClassificationEngineTests: XCTestCase {
     private let source = URL(fileURLWithPath: "/Downloads", isDirectory: true)

@@ -3,7 +3,7 @@ import AppIntents
 import SwiftUI
 
 @main
-struct DownloadOrganizerApp: App {
+struct DeclutterApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var delegate
     @State private var model: AppModel
 

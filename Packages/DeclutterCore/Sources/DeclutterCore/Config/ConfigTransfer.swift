@@ -65,7 +65,7 @@ public enum ConfigTransferError: Error, Equatable, LocalizedError, Sendable {
         case .malformed:
             "The file is not a valid configuration."
         case .wrongFormat:
-            "This file is not a Download Organizer configuration."
+            "This file is not a Declutter configuration."
         case .newerSchema(let version):
             "This configuration uses schema \(version), which is newer than this version of the app."
         case .invalidRules(let messages):
@@ -77,7 +77,7 @@ public enum ConfigTransferError: Error, Equatable, LocalizedError, Sendable {
 }
 
 public enum ConfigTransfer {
-    public static let format = "download-organizer-config"
+    public static let format = "declutter-config"
 
     public static func export(
         categories: [Category],
@@ -106,7 +106,7 @@ public enum ConfigTransfer {
         } catch {
             throw ConfigTransferError.malformed
         }
-        guard header.format == format else { throw ConfigTransferError.wrongFormat }
+        guard header.format == format || header.format == "download-organizer-config" else { throw ConfigTransferError.wrongFormat }
         if header.schemaVersion > SchemaVersion.current {
             throw ConfigTransferError.newerSchema(header.schemaVersion)
         }

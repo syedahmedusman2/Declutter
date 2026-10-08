@@ -34,7 +34,7 @@ public struct FSEventsMonitor: FileEventSource {
                 continuation.finish()
                 return
             }
-            let queue = DispatchQueue(label: "downloadorganizer.fsevents")
+            let queue = DispatchQueue(label: "declutter.fsevents")
             FSEventStreamSetDispatchQueue(stream, queue)
             FSEventStreamStart(stream)
             let handle = StreamHandle(stream: stream, bridge: retained)

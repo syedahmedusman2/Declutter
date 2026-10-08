@@ -29,7 +29,7 @@ APPCAST_FILE="$RELEASES_DIR/appcast.xml"
 # Read version from project.yml
 VERSION=$(grep 'MARKETING_VERSION:' project.yml | head -1 | sed 's/.*: *"\(.*\)"/\1/')
 BUILD_NUMBER=$(grep 'CURRENT_PROJECT_VERSION:' project.yml | head -1 | sed 's/.*: *"\(.*\)"/\1/')
-DMG_NAME="DownloadOrganizer-${VERSION}.dmg"
+DMG_NAME="Declutter-${VERSION}.dmg"
 DMG_PATH="$RELEASES_DIR/$DMG_NAME"
 
 # ── Resolve GitHub repo URL ─────────────────────────────────────────────────
@@ -57,7 +57,7 @@ echo "  Download URL: $DOWNLOAD_URL"
 SPARKLE_BIN=""
 # Check common locations for generate_appcast
 for candidate in \
-  "$ROOT/Packages/DownloadOrganizerCore/.build/artifacts/sparkle/Sparkle/bin/generate_appcast" \
+  "$ROOT/Packages/DeclutterCore/.build/artifacts/sparkle/Sparkle/bin/generate_appcast" \
   "$HOME/Library/Developer/Xcode/DerivedData/*/SourcePackages/artifacts/sparkle/Sparkle/bin/generate_appcast" \
   "/usr/local/bin/generate_appcast" \
   "$(brew --prefix 2>/dev/null)/bin/generate_appcast"; do
@@ -100,7 +100,7 @@ if [ -n "${SPARKLE_PRIVATE_KEY:-}" ]; then
   # Sign using Sparkle's sign_update if available
   SIGN_BIN=""
   for candidate in \
-    "$ROOT/Packages/DownloadOrganizerCore/.build/artifacts/sparkle/Sparkle/bin/sign_update" \
+    "$ROOT/Packages/DeclutterCore/.build/artifacts/sparkle/Sparkle/bin/sign_update" \
     "$HOME/Library/Developer/Xcode/DerivedData/*/SourcePackages/artifacts/sparkle/Sparkle/bin/sign_update" \
     "/usr/local/bin/sign_update"; do
     for expanded in $candidate; do
@@ -132,9 +132,9 @@ cat > "$APPCAST_FILE" <<XML
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>Download Organizer</title>
+    <title>Declutter</title>
     <link>${APPCAST_URL}</link>
-    <description>Download Organizer update feed</description>
+    <description>Declutter update feed</description>
     <language>en</language>
 
     <item>

@@ -7,10 +7,10 @@ cd "$ROOT"
 xcodegen generate
 
 xcodebuild \
-  -project DownloadOrganizer.xcodeproj \
-  -scheme DownloadOrganizer \
+  -project Declutter.xcodeproj \
+  -scheme Declutter \
   -destination 'platform=macOS,arch=arm64' \
   -derivedDataPath "$ROOT/build/DerivedData" \
   build
 
-swift test --package-path Packages/DownloadOrganizerCore
+swift test --package-path Packages/DeclutterCore

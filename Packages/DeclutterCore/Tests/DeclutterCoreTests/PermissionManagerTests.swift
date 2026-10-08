@@ -1,5 +1,5 @@
 import XCTest
-@testable import DownloadOrganizerCore
+@testable import DeclutterCore
 
 final class PermissionManagerTests: XCTestCase {
     func testCreateResolveRefreshStaleAndRevoke() throws {

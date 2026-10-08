@@ -1,4 +1,4 @@
-import DownloadOrganizerCore
+import DeclutterCore
 import UserNotifications
 
 struct UserNotificationPoster: NotificationDelivering {

@@ -1,5 +1,5 @@
 import XCTest
-@testable import DownloadOrganizerCore
+@testable import DeclutterCore
 
 final class OrganizePhase3Tests: XCTestCase {
     private let fileSystem = SystemFileSystem()

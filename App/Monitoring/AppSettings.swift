@@ -1,5 +1,5 @@
 import AppKit
-import DownloadOrganizerCore
+import DeclutterCore
 import Foundation
 import Observation
 import SwiftUI

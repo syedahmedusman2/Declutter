@@ -1,5 +1,5 @@
 import XCTest
-@testable import DownloadOrganizerCore
+@testable import DeclutterCore
 
 final class RuleEngineTests: XCTestCase {
     private let engine = RuleEngine()

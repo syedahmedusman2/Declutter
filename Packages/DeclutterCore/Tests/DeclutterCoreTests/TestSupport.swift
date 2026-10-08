@@ -1,13 +1,13 @@
 import Foundation
 import XCTest
-@testable import DownloadOrganizerCore
+@testable import DeclutterCore
 
 final class TemporaryDirectory {
     let url: URL
 
     init() throws {
         url = FileManager.default.temporaryDirectory
-            .appendingPathComponent("DownloadOrganizer-\(UUID().uuidString)", isDirectory: true)
+            .appendingPathComponent("Declutter-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
     }
 
@@ -73,7 +73,7 @@ func makeCategory(
     matchCase: Bool = false,
     op: Operator = .isOneOf,
     value: String? = nil
-) -> DownloadOrganizerCore.Category {
+) -> DeclutterCore.Category {
     let now = Date(timeIntervalSince1970: 1_700_000_000)
     let rule: RuleNode = isCatchAll
         ? .group(.and, [])

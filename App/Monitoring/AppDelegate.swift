@@ -1,5 +1,5 @@
 import AppKit
-import DownloadOrganizerCore
+import DeclutterCore
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {

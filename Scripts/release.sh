@@ -46,20 +46,20 @@ EXPORT_DIR="$BUILD_DIR/Export"
 RELEASES_DIR="$BUILD_DIR/releases"
 DERIVED_DATA="$BUILD_DIR/DerivedData"
 
-APP_NAME="Download Organizer"
-SCHEME="DownloadOrganizer"
+APP_NAME="Declutter"
+SCHEME="Declutter"
 CONFIGURATION="Release-Direct"
 
 # Read version from project.yml
 VERSION=$(grep 'MARKETING_VERSION:' project.yml | head -1 | sed 's/.*: *"\(.*\)"/\1/')
 BUILD_NUMBER=$(grep 'CURRENT_PROJECT_VERSION:' project.yml | head -1 | sed 's/.*: *"\(.*\)"/\1/')
-DMG_NAME="DownloadOrganizer-${VERSION}.dmg"
+DMG_NAME="Declutter-${VERSION}.dmg"
 
 CODESIGN_IDENTITY="${CODESIGN_IDENTITY:--}"  # "-" = ad-hoc
 NOTARY_PROFILE="${NOTARY_PROFILE:-AC_NOTARY}"
 
 echo "═══════════════════════════════════════════════════════════"
-echo "  Download Organizer — Release v${VERSION} (build ${BUILD_NUMBER})"
+echo "  Declutter — Release v${VERSION} (build ${BUILD_NUMBER})"
 echo "  Identity: ${CODESIGN_IDENTITY}"
 echo "  Notarize: ${DO_NOTARIZE}"
 echo "  GitHub:   ${DO_GITHUB}"
@@ -81,13 +81,13 @@ echo ""
 echo "▸ Step 2/9: Archiving ($CONFIGURATION)..."
 
 # If Release-Direct config doesn't exist yet, fall back to Release
-if ! xcodebuild -project DownloadOrganizer.xcodeproj -scheme "$SCHEME" -showBuildSettings -configuration "$CONFIGURATION" &>/dev/null 2>&1; then
+if ! xcodebuild -project Declutter.xcodeproj -scheme "$SCHEME" -showBuildSettings -configuration "$CONFIGURATION" &>/dev/null 2>&1; then
   echo "  ⚠ Configuration '$CONFIGURATION' not found, falling back to 'Release'"
   CONFIGURATION="Release"
 fi
 
 xcodebuild archive \
-  -project DownloadOrganizer.xcodeproj \
+  -project Declutter.xcodeproj \
   -scheme "$SCHEME" \
   -configuration "$CONFIGURATION" \
   -archivePath "$ARCHIVE_PATH" \
@@ -250,19 +250,19 @@ if [ "$DO_GITHUB" = true ]; then
     CHANGELOG=$(awk "/^## .*${VERSION}/,/^## /" "$ROOT/CHANGELOG.md" | head -n -1)
   fi
 
-  RELEASE_NOTES="## Download Organizer v${VERSION}
+  RELEASE_NOTES="## Declutter v${VERSION}
 
 ### Installation
 
 1. Download \`${DMG_NAME}\` below
-2. Open the DMG and drag **Download Organizer** to your Applications folder
+2. Open the DMG and drag **Declutter** to your Applications folder
 3. Launch from Applications"
 
   if [ "$CODESIGN_IDENTITY" = "-" ]; then
     RELEASE_NOTES+="
 4. **First launch**: Right-click the app → Open, or run:
    \`\`\`bash
-   xattr -dr com.apple.quarantine /Applications/Download\\ Organizer.app
+   xattr -dr com.apple.quarantine /Applications/Declutter.app
    \`\`\`
 
 > ⚠️ This build is ad-hoc signed (not notarized). macOS Gatekeeper will show a warning on first launch. Use the steps above to bypass it."
@@ -309,6 +309,6 @@ echo ""
 if [ "$CODESIGN_IDENTITY" = "-" ]; then
   echo "  ⚠ This is an AD-HOC build (no Developer ID)."
   echo "    Recipients must right-click → Open or run:"
-  echo "    xattr -dr com.apple.quarantine /Applications/Download\\ Organizer.app"
+  echo "    xattr -dr com.apple.quarantine /Applications/Declutter.app"
 fi
 echo "═══════════════════════════════════════════════════════════"

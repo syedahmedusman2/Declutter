@@ -1,5 +1,5 @@
 import XCTest
-@testable import DownloadOrganizerCore
+@testable import DeclutterCore
 
 final class FileOrganizerTests: XCTestCase {
     private let fileSystem = SystemFileSystem()
@@ -73,7 +73,7 @@ final class FileOrganizerTests: XCTestCase {
     private func move(
         _ name: String,
         contents: String,
-        category: DownloadOrganizerCore.Category,
+        category: DeclutterCore.Category,
         organizer: FileOrganizer,
         root: TemporaryDirectory
     ) throws -> FileMoveResult {

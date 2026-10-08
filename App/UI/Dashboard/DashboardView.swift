@@ -1,4 +1,4 @@
-import DownloadOrganizerCore
+import DeclutterCore
 import SwiftUI
 
 struct DashboardView: View {

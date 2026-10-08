@@ -3,29 +3,30 @@
 import PackageDescription
 
 let package = Package(
-    name: "DownloadOrganizerCore",
+    name: "DeclutterCore",
     platforms: [
         .macOS(.v14)
     ],
     products: [
         .library(
-            name: "DownloadOrganizerCore",
-            targets: ["DownloadOrganizerCore"]
+            name: "DeclutterCore",
+            targets: ["DeclutterCore"]
         )
     ],
     targets: [
         .target(
-            name: "DownloadOrganizerCore",
+            name: "DeclutterCore",
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
         ),
         .testTarget(
-            name: "DownloadOrganizerCoreTests",
-            dependencies: ["DownloadOrganizerCore"],
+            name: "DeclutterCoreTests",
+            dependencies: ["DeclutterCore"],
             swiftSettings: [
                 .swiftLanguageMode(.v6)
             ]
         )
     ]
 )
+

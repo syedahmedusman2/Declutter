@@ -169,7 +169,7 @@ jobs:
       - name: Run package tests
         run: |
           swift test \
-            --package-path Packages/DownloadOrganizerCore \
+            --package-path Packages/DeclutterCore \
             --parallel
 
       # ── Build release ──────────────────────────────────────────────────────
@@ -191,17 +191,17 @@ jobs:
         if: steps.signing.outputs.mode == 'developer-id'
         run: |
           echo "Verifying app signature..."
-          spctl -a -vv "build/Export/Download Organizer.app"
+          spctl -a -vv "build/Export/Declutter.app"
 
           echo "Verifying DMG signature..."
-          spctl -a -vv --type install "build/releases/DownloadOrganizer-${{ steps.version.outputs.version }}.dmg"
+          spctl -a -vv --type install "build/releases/Declutter-${{ steps.version.outputs.version }}.dmg"
 
       # ── Prepare release notes ──────────────────────────────────────────────
       - name: Prepare release notes
         id: notes
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          DMG_NAME="DownloadOrganizer-${VERSION}.dmg"
+          DMG_NAME="Declutter-${VERSION}.dmg"
           DMG_PATH="build/releases/${DMG_NAME}"
           DMG_SIZE=$(du -h "$DMG_PATH" | cut -f1)
           DMG_SHA=$(shasum -a 256 "$DMG_PATH" | cut -d' ' -f1)
@@ -210,7 +210,7 @@ jobs:
           NOTES_FILE="$RUNNER_TEMP/release_notes.md"
 
           cat > "$NOTES_FILE" <<'HEADER'
-          ## Download Organizer v${VERSION}
+          ## Declutter v${VERSION}
 
           HEADER
 
@@ -227,7 +227,7 @@ jobs:
           ### Installation
 
           1. Download \`${DMG_NAME}\` (${DMG_SIZE})
-          2. Open the DMG and drag **Download Organizer** to Applications
+          2. Open the DMG and drag **Declutter** to Applications
           3. Launch from Applications
           INSTALL
 
@@ -237,7 +237,7 @@ jobs:
              - **Right-click** (or Control-click) the app → **Open** → click **Open** again
              - Or run in Terminal:
                ```bash
-               xattr -dr com.apple.quarantine "/Applications/Download Organizer.app"
+               xattr -dr com.apple.quarantine "/Applications/Declutter.app"
                ```
 
           > [!NOTE]
@@ -270,14 +270,14 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "Download Organizer v${{ steps.version.outputs.version }}"
+          name: "Declutter v${{ steps.version.outputs.version }}"
           body_path: ${{ steps.notes.outputs.notes_file }}
           draft: true
           prerelease: false
           files: |
-            build/releases/DownloadOrganizer-${{ steps.version.outputs.version }}.dmg
+            build/releases/Declutter-${{ steps.version.outputs.version }}.dmg
             build/releases/appcast.xml
-            build/Download Organizer.zip
+            build/Declutter.zip
           fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

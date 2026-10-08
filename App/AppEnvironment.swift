@@ -1,4 +1,4 @@
-import DownloadOrganizerCore
+import DeclutterCore
 import Foundation
 
 struct AppEnvironment {
@@ -60,7 +60,7 @@ struct AppEnvironment {
 private struct StoreCategories: CategoryProviding {
     let store: CategoryStore
 
-    func categories() async -> [DownloadOrganizerCore.Category] {
+    func categories() async -> [DeclutterCore.Category] {
         if let stored = try? store.load(), !stored.categories.isEmpty {
             return stored.categories
         }

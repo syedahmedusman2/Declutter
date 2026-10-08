@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# ci.yml — Continuous Integration for Download Organizer
+# ci.yml — Continuous Integration for Declutter
 # ─────────────────────────────────────────────────────────────────────────────
 # Runs on every push and PR: builds the project and runs package tests.
 # No secrets required.
@@ -9,9 +9,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   pull_request:
-    branches: [main]
+    branches: [main, master]
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -45,21 +45,21 @@ jobs:
       - name: Resolve packages
         run: |
           xcodebuild -resolvePackageDependencies \
-            -project DownloadOrganizer.xcodeproj \
-            -scheme DownloadOrganizer \
+            -project Declutter.xcodeproj \
+            -scheme Declutter \
             -derivedDataPath build/DerivedData
 
       - name: Run package tests
         run: |
           swift test \
-            --package-path Packages/DownloadOrganizerCore \
+            --package-path Packages/DeclutterCore \
             --parallel
 
       - name: Build app (Debug)
         run: |
           xcodebuild build \
-            -project DownloadOrganizer.xcodeproj \
-            -scheme DownloadOrganizer \
+            -project Declutter.xcodeproj \
+            -scheme Declutter \
             -configuration Debug \
             -destination 'platform=macOS,arch=arm64' \
             -derivedDataPath build/DerivedData \
@@ -70,8 +70,8 @@ jobs:
       - name: Build app (Release)
         run: |
           xcodebuild build \
-            -project DownloadOrganizer.xcodeproj \
-            -scheme DownloadOrganizer \
+            -project Declutter.xcodeproj \
+            -scheme Declutter \
             -configuration Release \
             -destination 'platform=macOS,arch=arm64' \
             -derivedDataPath build/DerivedData \

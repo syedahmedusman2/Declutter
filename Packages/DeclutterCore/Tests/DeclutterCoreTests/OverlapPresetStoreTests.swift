@@ -1,5 +1,5 @@
 import XCTest
-@testable import DownloadOrganizerCore
+@testable import DeclutterCore
 
 final class OverlapPresetStoreTests: XCTestCase {
     private let now = Date(timeIntervalSince1970: 1_700_000_000)
@@ -118,7 +118,7 @@ final class OverlapPresetStoreTests: XCTestCase {
         XCTAssertEqual(migrated.categories.map(\.name), ["PDFs"])
     }
 
-    private func priority(of name: String, in categories: [DownloadOrganizerCore.Category]) -> Int {
+    private func priority(of name: String, in categories: [DeclutterCore.Category]) -> Int {
         categories.first { $0.name == name }?.priority ?? -1
     }
 }
