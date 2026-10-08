@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/OWNER/declutter/releases/latest"><img src="https://img.shields.io/github/v/release/OWNER/declutter?style=for-the-badge&label=Download&color=6366f1" alt="Download latest"></a>
+  <a href="https://github.com/syedahmedusman2/Declutter/releases/latest"><img src="https://img.shields.io/github/v/release/syedahmedusman2/Declutter?style=for-the-badge&label=Download&color=6366f1" alt="Download latest"></a>
   <img src="https://img.shields.io/badge/macOS-14%2B%20Sonoma%20%2F%20Sequoia-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS 14+">
   <img src="https://img.shields.io/badge/Swift-6.0-F05138?style=for-the-badge&logo=swift&logoColor=white" alt="Swift 6">
   <img src="https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge" alt="MIT License">
@@ -43,7 +43,7 @@ Declutter runs quietly in the background or on demand to keep your workspaces pr
 
 ### Option 1: Direct Download (DMG)
 
-1. Head over to [**Latest Releases**](https://github.com/OWNER/declutter/releases/latest).
+1. Head over to [**Latest Releases**](https://github.com/syedahmedusman2/Declutter/releases/latest).
 2. Download `Declutter-0.1.0.dmg`.
 3. Open the DMG and drag **Declutter** to your **Applications** folder.
 4. Launch **Declutter** from Applications or Spotlight.
@@ -115,8 +115,8 @@ brew install --cask declutter
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/OWNER/declutter.git
-cd declutter
+git clone https://github.com/syedahmedusman2/Declutter.git
+cd Declutter
 
 # 2. Generate Xcode project
 xcodegen generate

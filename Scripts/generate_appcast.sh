@@ -43,7 +43,7 @@ if [ -z "${GITHUB_REPO_URL:-}" ]; then
   if [ -z "$GITHUB_REPO_URL" ]; then
     echo "⚠ Could not detect GitHub repo URL. Set GITHUB_REPO_URL env var."
     echo "  Appcast will use placeholder URLs."
-    GITHUB_REPO_URL="https://github.com/OWNER/REPO"
+    GITHUB_REPO_URL="https://github.com/syedahmedusman2/Declutter"
   fi
 fi
 
