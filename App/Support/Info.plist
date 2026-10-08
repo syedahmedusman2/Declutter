@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>LSUIElement</key>
+	<false/>
+
+	<!-- Sparkle auto-update configuration (used by Release-Direct only) -->
+	<!-- Replace OWNER/REPO with your actual GitHub repository path -->
+	<key>SUFeedURL</key>
+	<string>https://github.com/OWNER/REPO/releases/latest/download/appcast.xml</string>
+
+	<!-- Replace with your actual EdDSA public key from Sparkle's generate_keys -->
+	<!-- To generate: run generate_keys from Sparkle's bin/ directory -->
+	<key>SUPublicEDKey</key>
+	<string>PASTE_YOUR_EDDSA_PUBLIC_KEY_HERE</string>
+
+	<!-- Allow Sparkle to check for updates automatically -->
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+</dict>
+</plist>

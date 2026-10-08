@@ -1,0 +1,978 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "%@ → %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ → %2$@"
+          }
+        }
+      }
+    },
+    "%@ enabled" : {
+
+    },
+    "%@ moved to %@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ moved to %2$@, %3$@"
+          }
+        }
+      }
+    },
+    "%@ would move to %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ would move to %2$@"
+          }
+        }
+      }
+    },
+    "%@ would win instead." : {
+
+    },
+    "%@, %@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@, %3$@"
+          }
+        }
+      }
+    },
+    "%@: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@: %2$@"
+          }
+        }
+      }
+    },
+    "%@. %@: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@. %2$@: %3$@"
+          }
+        }
+      }
+    },
+    "%lld files in the preview." : {
+
+    },
+    "30 days" : {
+
+    },
+    "90 days" : {
+
+    },
+    "365 days" : {
+
+    },
+    "A burst of files becomes one notification." : {
+
+    },
+    "A category can override this. Replace moves the existing file to the Trash only after you confirm, and undo can restore it." : {
+
+    },
+    "A higher-priority category would win instead: %@" : {
+
+    },
+    "Action" : {
+
+    },
+    "Activity" : {
+
+    },
+    "Actual: %@" : {
+
+    },
+    "Add" : {
+
+    },
+    "Add a category or apply a preset." : {
+
+    },
+    "Add Condition" : {
+
+    },
+    "Add extension" : {
+
+    },
+    "Add Group" : {
+
+    },
+    "Added: %@" : {
+
+    },
+    "All" : {
+
+    },
+    "All categories" : {
+
+    },
+    "All conflicts" : {
+
+    },
+    "and" : {
+
+    },
+    "Any" : {
+
+    },
+    "Any status" : {
+
+    },
+    "Appearance" : {
+
+    },
+    "Apply" : {
+
+    },
+    "Apply %@?" : {
+
+    },
+    "Apply a preset" : {
+
+    },
+    "Ask" : {
+
+    },
+    "Asks you to confirm, then moves the files in the preview." : {
+
+    },
+    "Auto Rename" : {
+
+    },
+    "Automation" : {
+
+    },
+    "Automation mode" : {
+
+    },
+    "Back" : {
+
+    },
+    "Background" : {
+
+    },
+    "Bookmarks are not imported. Apply only if this summary looks right." : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Catch-all" : {
+
+    },
+    "Catch-all, always last" : {
+
+    },
+    "Categories in priority order" : {
+
+    },
+    "Category" : {
+
+    },
+    "Category name" : {
+
+    },
+    "Changed: %@" : {
+
+    },
+    "Check Sample" : {
+
+    },
+    "Choose a folder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a folder"
+          }
+        }
+      }
+    },
+    "Choose a Folder" : {
+
+    },
+    "Choose a folder first." : {
+
+    },
+    "Choose File…" : {
+
+    },
+    "Choose Folder" : {
+
+    },
+    "Choose Folder…" : {
+
+    },
+    "Choose or reauthorize the folder on the Files screen. The path is not stored in exported settings." : {
+
+    },
+    "Clear all history?" : {
+
+    },
+    "Clear History" : {
+
+    },
+    "Clear Undo Records" : {
+
+    },
+    "Clear undo records?" : {
+
+    },
+    "Condition field" : {
+
+    },
+    "Condition operator" : {
+
+    },
+    "Condition value" : {
+
+    },
+    "Configuration" : {
+
+    },
+    "Confirm before moving %lld or more files" : {
+
+    },
+    "Conflict" : {
+
+    },
+    "Conflict behavior" : {
+
+    },
+    "Conflict Status" : {
+
+    },
+    "Conflicts" : {
+
+    },
+    "Could Not Load History" : {
+
+    },
+    "Could Not Preview" : {
+
+    },
+    "Could Not Scan Folder" : {
+
+    },
+    "Could Not Update Rules" : {
+
+    },
+    "Current Location" : {
+
+    },
+    "Dashboard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dashboard"
+          }
+        }
+      }
+    },
+    "Date" : {
+
+    },
+    "Default" : {
+
+    },
+    "Default categories" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Delete this category?" : {
+
+    },
+    "Destination" : {
+
+    },
+    "Destination kind" : {
+
+    },
+    "Destination: %@" : {
+
+    },
+    "Downloads is the suggested folder. The chooser opens there. The app only reads files you allow." : {
+
+    },
+    "Drop a file to test this rule" : {
+
+    },
+    "Duplicate" : {
+
+    },
+    "Edit" : {
+
+    },
+    "Edit Category" : {
+
+    },
+    "Enabled" : {
+
+    },
+    "End" : {
+
+    },
+    "Execute" : {
+
+    },
+    "Existing and new" : {
+
+    },
+    "Existing files only" : {
+
+    },
+    "Export Configuration" : {
+
+    },
+    "Export Diagnostics" : {
+
+    },
+    "Exports leave out bookmarks. Paths in diagnostics are redacted unless you include them." : {
+
+    },
+    "Extensions" : {
+
+    },
+    "Field" : {
+
+    },
+    "File" : {
+
+    },
+    "Files" : {
+
+    },
+    "Files may have moved. Refresh the preview to see the current plan." : {
+
+    },
+    "Files organized today: %lld" : {
+
+    },
+    "Files whose extension is one of these. Extra conditions below are combined with All." : {
+
+    },
+    "Finance/Invoices" : {
+
+    },
+    "Finish Without Moving" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finish Without Moving"
+          }
+        }
+      }
+    },
+    "Finishes setup and does not move any files." : {
+
+    },
+    "Fix the regular expression before saving." : {
+
+    },
+    "Folder" : {
+
+    },
+    "Folder access" : {
+
+    },
+    "Folder access is needed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder access is needed"
+          }
+        }
+      }
+    },
+    "Folder inside the source folder" : {
+
+    },
+    "Forever" : {
+
+    },
+    "General" : {
+
+    },
+    "Hidden files, folders, partial downloads, and links are skipped." : {
+
+    },
+    "Higher-priority categories" : {
+
+    },
+    "History" : {
+
+    },
+    "History grouped by day" : {
+
+    },
+    "Holds new files until you resume." : {
+
+    },
+    "How should new files be handled?" : {
+
+    },
+    "Icon symbol" : {
+
+    },
+    "If a file already exists" : {
+
+    },
+    "Import Configuration" : {
+
+    },
+    "Import summary" : {
+
+    },
+    "Include file paths in diagnostics" : {
+
+    },
+    "Inside source folder" : {
+
+    },
+    "Invalid regular expression. %@" : {
+
+    },
+    "Keep history" : {
+
+    },
+    "Keep organizing when the window is closed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep organizing when the window is closed"
+          }
+        }
+      }
+    },
+    "Keep running in background when the window is closed" : {
+
+    },
+    "Keeps the log and turns off undo for those moves." : {
+
+    },
+    "Keyboard shortcut Command N." : {
+
+    },
+    "Keyboard shortcut Command Return. Asks before moving when the batch is large or a file would be replaced." : {
+
+    },
+    "Large batches" : {
+
+    },
+    "Last activity %@" : {
+
+    },
+    "Last activity: none yet" : {
+
+    },
+    "Launch" : {
+
+    },
+    "Launch at Login" : {
+
+    },
+    "Light, Dark, and System all use the same labels. Status is an icon plus words." : {
+
+    },
+    "macOS keeps the folder private until you pick it. The app stores a bookmark so it can keep organizing after you quit. If you later revoke access, use Reauthorize Folder. No files are moved in this step." : {
+
+    },
+    "Match" : {
+
+    },
+    "MATCH" : {
+
+    },
+    "Match all, any, or none of the conditions in this group" : {
+
+    },
+    "Match case" : {
+
+    },
+    "Matches files that no earlier category takes. Catch-all categories are always evaluated last." : {
+
+    },
+    "Maximum bytes" : {
+
+    },
+    "Merge" : {
+
+    },
+    "Minimum bytes" : {
+
+    },
+    "Mode" : {
+
+    },
+    "Move Down" : {
+
+    },
+    "Move Files" : {
+
+    },
+    "Move symbolic links" : {
+
+    },
+    "Move These Files" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move These Files"
+          }
+        }
+      }
+    },
+    "Move these files?" : {
+
+    },
+    "Move Up" : {
+
+    },
+    "Moves" : {
+
+    },
+    "Moves this file back. If the original name is taken, it is restored beside it." : {
+
+    },
+    "Moves you confirm, and files organized while monitoring, show up here." : {
+
+    },
+    "Name" : {
+
+    },
+    "New category" : {
+
+    },
+    "New Category" : {
+
+    },
+    "New files only" : {
+
+    },
+    "No Activity Yet" : {
+
+    },
+    "No Categories" : {
+
+    },
+    "No extra conditions. Add one to match on the name, type, size, or date." : {
+
+    },
+    "No Files" : {
+
+    },
+    "No files to organize." : {
+
+    },
+    "No folder selected yet." : {
+
+    },
+    "No History" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No History"
+          }
+        }
+      }
+    },
+    "No match" : {
+
+    },
+    "NO MATCH" : {
+
+    },
+    "No Selection" : {
+
+    },
+    "None" : {
+
+    },
+    "Not Now" : {
+
+    },
+    "Nothing is moved." : {
+
+    },
+    "Nothing to Preview" : {
+
+    },
+    "Notifications" : {
+
+    },
+    "Notify me about" : {
+
+    },
+    "Off compares letters without regard to case." : {
+
+    },
+    "OK" : {
+
+    },
+    "Open Organizer" : {
+
+    },
+    "Open Rules" : {
+
+    },
+    "Opens a preview. Files move only after you confirm." : {
+
+    },
+    "Opens the category and the Test Rule panel." : {
+
+    },
+    "Opens the folder chooser so the app can read the folder again." : {
+
+    },
+    "Opens the folder panel, starting in Downloads." : {
+
+    },
+    "Operator" : {
+
+    },
+    "Organize Existing" : {
+
+    },
+    "Organize Existing Files" : {
+
+    },
+    "Organize Existing works in every mode. Monitoring moves only new, stable files after about two seconds." : {
+
+    },
+    "Organize files and each move shows up here, grouped by day." : {
+
+    },
+    "Organize these files?" : {
+
+    },
+    "Organized %lld. Today %lld. Skipped %lld. Failed %lld." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Organized %1$lld. Today %2$lld. Skipped %3$lld. Failed %4$lld."
+          }
+        }
+      }
+    },
+    "Organizing" : {
+
+    },
+    "Other folder" : {
+
+    },
+    "Pause" : {
+
+    },
+    "Pause Monitoring" : {
+
+    },
+    "Pause or Resume" : {
+
+    },
+    "pdf, png" : {
+
+    },
+    "Preparing preview" : {
+
+    },
+    "Presets" : {
+
+    },
+    "Preview" : {
+
+    },
+    "Priority" : {
+
+    },
+    "Quit" : {
+
+    },
+    "Reauthorize Folder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reauthorize Folder"
+          }
+        }
+      }
+    },
+    "Recent activity" : {
+
+    },
+    "Records" : {
+
+    },
+    "Refresh" : {
+
+    },
+    "Remove %@" : {
+
+    },
+    "Remove condition" : {
+
+    },
+    "Remove Condition" : {
+
+    },
+    "Remove empty category folders after undo" : {
+
+    },
+    "Remove group" : {
+
+    },
+    "Remove Group" : {
+
+    },
+    "Removed: %@" : {
+
+    },
+    "Removes the activity log. This does not move files." : {
+
+    },
+    "Replace" : {
+
+    },
+    "Replace Categories" : {
+
+    },
+    "Rescan" : {
+
+    },
+    "Reset" : {
+
+    },
+    "Reset categories to the defaults?" : {
+
+    },
+    "Reset to Defaults" : {
+
+    },
+    "Resume" : {
+
+    },
+    "Resume Monitoring" : {
+
+    },
+    "Resume monitoring on launch" : {
+
+    },
+    "Retention" : {
+
+    },
+    "Returns to Files and opens the folder chooser." : {
+
+    },
+    "Rule" : {
+
+    },
+    "Rules" : {
+
+    },
+    "Safety" : {
+
+    },
+    "Save" : {
+
+    },
+    "Scanning" : {
+
+    },
+    "Search" : {
+
+    },
+    "Search history" : {
+
+    },
+    "Search preview" : {
+
+    },
+    "Select a move to see why it happened and to undo it." : {
+
+    },
+    "Select All" : {
+
+    },
+    "Select None" : {
+
+    },
+    "Selected folder %@" : {
+
+    },
+    "Show in Dock" : {
+
+    },
+    "Show menu bar icon" : {
+
+    },
+    "Shows whether this rule matches the file. The file is not moved." : {
+
+    },
+    "Size in bytes" : {
+
+    },
+    "Skip" : {
+
+    },
+    "Skipped: %lld. Failed: %lld." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Skipped: %1$lld. Failed: %2$lld."
+          }
+        }
+      }
+    },
+    "Start" : {
+
+    },
+    "Start Monitoring" : {
+
+    },
+    "Status" : {
+
+    },
+    "Status: %@" : {
+
+    },
+    "Step %lld of 6" : {
+
+    },
+    "Stop" : {
+
+    },
+    "Stop Monitoring" : {
+
+    },
+    "Symbol name" : {
+
+    },
+    "Test" : {
+
+    },
+    "Test file %@. Drop another file to replace it." : {
+
+    },
+    "Test Rule" : {
+
+    },
+    "The activity log stays. Those moves can no longer be undone." : {
+
+    },
+    "The app never deletes files. Replace sends the previous file to the Trash. One failed file does not stop the rest." : {
+
+    },
+    "The category is removed from the list. Files already moved stay where they are." : {
+
+    },
+    "The chooser opens in Downloads. Files are listed with a category. Nothing is moved." : {
+
+    },
+    "The menu bar icon stays visible while the app runs in the background." : {
+
+    },
+    "These categories are editable later. Nothing is moved while you review them." : {
+
+    },
+    "This app sorts a folder you choose. It previews every move, and it does not move anything until you confirm." : {
+
+    },
+    "This category is disabled." : {
+
+    },
+    "This category would be used." : {
+
+    },
+    "This is a dry run. Files stay where they are until you confirm on this step." : {
+
+    },
+    "This is the confirmation. Nothing has been moved yet." : {
+
+    },
+    "Total organized: %lld" : {
+
+    },
+    "Turn on background running before launching at login." : {
+
+    },
+    "Undo" : {
+
+    },
+    "Undo Last Batch" : {
+
+    },
+    "Use app default" : {
+
+    },
+    "Uses a real file to see which categories match. Overlap warnings are best-effort." : {
+
+    },
+    "Values, separated by commas" : {
+
+    },
+    "Watch" : {
+
+    },
+    "Welcome to %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to %@"
+          }
+        }
+      }
+    },
+    "When" : {
+
+    },
+    "When a file already has that name" : {
+
+    }
+  },
+  "version" : "1.0"
+}

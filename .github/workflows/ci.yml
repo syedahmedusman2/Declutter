@@ -1,0 +1,80 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ci.yml — Continuous Integration for Download Organizer
+# ─────────────────────────────────────────────────────────────────────────────
+# Runs on every push and PR: builds the project and runs package tests.
+# No secrets required.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: macos-14  # Apple Silicon runner with Xcode 16+
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          # Use the latest stable Xcode on the runner
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          xcodebuild -version
+          swift --version
+
+      - name: Install dependencies
+        run: |
+          brew install xcodegen
+          # create-dmg not needed for CI, only for releases
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Resolve packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project DownloadOrganizer.xcodeproj \
+            -scheme DownloadOrganizer \
+            -derivedDataPath build/DerivedData
+
+      - name: Run package tests
+        run: |
+          swift test \
+            --package-path Packages/DownloadOrganizerCore \
+            --parallel
+
+      - name: Build app (Debug)
+        run: |
+          xcodebuild build \
+            -project DownloadOrganizer.xcodeproj \
+            -scheme DownloadOrganizer \
+            -configuration Debug \
+            -destination 'platform=macOS,arch=arm64' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_ALLOWED=NO \
+            | tail -20
+
+      - name: Build app (Release)
+        run: |
+          xcodebuild build \
+            -project DownloadOrganizer.xcodeproj \
+            -scheme DownloadOrganizer \
+            -configuration Release \
+            -destination 'platform=macOS,arch=arm64' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_ALLOWED=NO \
+            | tail -20

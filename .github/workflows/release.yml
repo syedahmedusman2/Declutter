@@ -1,0 +1,292 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# release.yml — Build, package, and publish a release on tag push
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# Triggered by pushing a tag like v0.1.0.
+# Builds the app, creates a DMG, generates an appcast, and publishes a
+# GitHub Release with all artifacts.
+#
+# This workflow supports TWO modes:
+#
+#   1. FREE (no Apple Developer account) — DEFAULT
+#      Ad-hoc signed build. Users must right-click → Open on first launch.
+#      No secrets required except SPARKLE_PRIVATE_KEY (optional).
+#
+#   2. PAID (Apple Developer account enrolled)
+#      Developer ID signed + notarized. No Gatekeeper warnings.
+#      Requires all secrets listed below.
+#
+# The workflow auto-detects which mode to use based on whether
+# DEVELOPER_ID_CERT_P12_BASE64 is set.
+#
+# ─── Required Secrets (FREE mode) ──────────────────────────────────────────
+#
+#   (none required — GITHUB_TOKEN is provided automatically)
+#
+#   Optional:
+#     SPARKLE_PRIVATE_KEY — EdDSA private key for Sparkle update signing
+#
+# ─── Required Secrets (PAID mode) ──────────────────────────────────────────
+#
+#   DEVELOPER_ID_CERT_P12_BASE64
+#     Base64-encoded .p12 file containing your Developer ID Application
+#     certificate and private key.
+#     Generate: security export -k login.keychain -t identities -f pkcs12 -o cert.p12
+#     Encode:   base64 -i cert.p12 | pbcopy
+#
+#   DEVELOPER_ID_CERT_PASSWORD
+#     Password used to protect the .p12 file above.
+#
+#   KEYCHAIN_PASSWORD
+#     Arbitrary password for the temporary keychain created during CI.
+#     Can be any random string — it's only used within the runner.
+#
+#   NOTARY_APPLE_ID
+#     Your Apple ID email (e.g., you@example.com).
+#     Used for notarytool authentication.
+#
+#   NOTARY_TEAM_ID
+#     Your Apple Developer Team ID (10-character alphanumeric).
+#     Find it at: https://developer.apple.com/account → Membership.
+#
+#   NOTARY_APP_PASSWORD
+#     An app-specific password for notarization.
+#     Generate at: https://appleid.apple.com/account/manage
+#     Under "Sign-In and Security" → "App-Specific Passwords".
+#
+#   SPARKLE_PRIVATE_KEY
+#     EdDSA private key for signing Sparkle updates.
+#     Generate with Sparkle's generate_keys tool.
+#     The matching public key must be in Info.plist (SUPublicEDKey).
+#
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write  # Required for creating GitHub Releases
+
+jobs:
+  release:
+    name: Build & Release
+    runs-on: macos-14
+    timeout-minutes: 45
+
+    steps:
+      # ── Checkout ───────────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for changelog
+
+      # ── Setup ──────────────────────────────────────────────────────────────
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          xcodebuild -version
+
+      - name: Install dependencies
+        run: brew install xcodegen create-dmg
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF#refs/tags/v}"
+          echo "version=$TAG" >> "$GITHUB_OUTPUT"
+          echo "tag=v$TAG" >> "$GITHUB_OUTPUT"
+          echo "Release version: $TAG"
+
+      # ── Detect signing mode ────────────────────────────────────────────────
+      - name: Detect signing mode
+        id: signing
+        run: |
+          if [ -n "${{ secrets.DEVELOPER_ID_CERT_P12_BASE64 }}" ]; then
+            echo "mode=developer-id" >> "$GITHUB_OUTPUT"
+            echo "identity=Developer ID Application" >> "$GITHUB_OUTPUT"
+            echo "✓ Developer ID certificate found — will sign and notarize"
+          else
+            echo "mode=ad-hoc" >> "$GITHUB_OUTPUT"
+            echo "identity=-" >> "$GITHUB_OUTPUT"
+            echo "ℹ No Developer ID certificate — using ad-hoc signing"
+          fi
+
+      # ── Import certificate (PAID mode only) ───────────────────────────────
+      - name: Import Developer ID certificate
+        if: steps.signing.outputs.mode == 'developer-id'
+        env:
+          P12_BASE64: ${{ secrets.DEVELOPER_ID_CERT_P12_BASE64 }}
+          P12_PASSWORD: ${{ secrets.DEVELOPER_ID_CERT_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          # Decode certificate
+          CERT_PATH="$RUNNER_TEMP/certificate.p12"
+          echo "$P12_BASE64" | base64 --decode > "$CERT_PATH"
+
+          # Create temporary keychain
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          # Import certificate
+          security import "$CERT_PATH" \
+            -P "$P12_PASSWORD" \
+            -A \
+            -t cert \
+            -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+
+          # Allow codesign to access the keychain
+          security set-key-partition-list \
+            -S apple-tool:,apple:,codesign: \
+            -s -k "$KEYCHAIN_PASSWORD" \
+            "$KEYCHAIN_PATH"
+
+          # Add to search list
+          security list-keychains -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | tr -d '"')
+
+          echo "✓ Certificate imported into temporary keychain"
+
+      # ── Store notarization credentials (PAID mode only) ────────────────────
+      - name: Store notarization credentials
+        if: steps.signing.outputs.mode == 'developer-id'
+        env:
+          NOTARY_APPLE_ID: ${{ secrets.NOTARY_APPLE_ID }}
+          NOTARY_TEAM_ID: ${{ secrets.NOTARY_TEAM_ID }}
+          NOTARY_APP_PASSWORD: ${{ secrets.NOTARY_APP_PASSWORD }}
+        run: |
+          xcrun notarytool store-credentials "AC_NOTARY" \
+            --apple-id "$NOTARY_APPLE_ID" \
+            --team-id "$NOTARY_TEAM_ID" \
+            --password "$NOTARY_APP_PASSWORD"
+
+      # ── Run tests ──────────────────────────────────────────────────────────
+      - name: Run package tests
+        run: |
+          swift test \
+            --package-path Packages/DownloadOrganizerCore \
+            --parallel
+
+      # ── Build release ──────────────────────────────────────────────────────
+      - name: Build release
+        env:
+          CODESIGN_IDENTITY: ${{ steps.signing.outputs.identity }}
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          chmod +x Scripts/release.sh Scripts/generate_appcast.sh
+
+          if [ "${{ steps.signing.outputs.mode }}" = "developer-id" ]; then
+            ./Scripts/release.sh --notarize
+          else
+            ./Scripts/release.sh
+          fi
+
+      # ── Verify signing (PAID mode) ────────────────────────────────────────
+      - name: Verify code signing
+        if: steps.signing.outputs.mode == 'developer-id'
+        run: |
+          echo "Verifying app signature..."
+          spctl -a -vv "build/Export/Download Organizer.app"
+
+          echo "Verifying DMG signature..."
+          spctl -a -vv --type install "build/releases/DownloadOrganizer-${{ steps.version.outputs.version }}.dmg"
+
+      # ── Prepare release notes ──────────────────────────────────────────────
+      - name: Prepare release notes
+        id: notes
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          DMG_NAME="DownloadOrganizer-${VERSION}.dmg"
+          DMG_PATH="build/releases/${DMG_NAME}"
+          DMG_SIZE=$(du -h "$DMG_PATH" | cut -f1)
+          DMG_SHA=$(shasum -a 256 "$DMG_PATH" | cut -d' ' -f1)
+
+          # Build release notes
+          NOTES_FILE="$RUNNER_TEMP/release_notes.md"
+
+          cat > "$NOTES_FILE" <<'HEADER'
+          ## Download Organizer v${VERSION}
+
+          HEADER
+
+          # Trim leading whitespace from heredoc
+          sed -i '' 's/^          //' "$NOTES_FILE"
+
+          # Extract changelog if available
+          if [ -f CHANGELOG.md ]; then
+            awk "/^## .*${VERSION}/,/^## /" CHANGELOG.md | head -n -1 >> "$NOTES_FILE"
+            echo "" >> "$NOTES_FILE"
+          fi
+
+          cat >> "$NOTES_FILE" <<INSTALL
+          ### Installation
+
+          1. Download \`${DMG_NAME}\` (${DMG_SIZE})
+          2. Open the DMG and drag **Download Organizer** to Applications
+          3. Launch from Applications
+          INSTALL
+
+          if [ "${{ steps.signing.outputs.mode }}" = "ad-hoc" ]; then
+            cat >> "$NOTES_FILE" <<'ADHOC'
+          4. **First launch only** — macOS will show a Gatekeeper warning because the app is not notarized. Use one of these methods:
+             - **Right-click** (or Control-click) the app → **Open** → click **Open** again
+             - Or run in Terminal:
+               ```bash
+               xattr -dr com.apple.quarantine "/Applications/Download Organizer.app"
+               ```
+
+          > [!NOTE]
+          > This build is **ad-hoc signed** — it is not associated with a paid Apple Developer ID. This is safe for open-source software; the source code is available in this repository for verification.
+          ADHOC
+          else
+            cat >> "$NOTES_FILE" <<'SIGNED'
+
+          This build is **signed with Developer ID** and **notarized by Apple**. macOS will open it without any warnings.
+          SIGNED
+          fi
+
+          cat >> "$NOTES_FILE" <<CHECKSUMS
+
+          ### Checksums
+
+          | File | SHA-256 |
+          |------|---------|
+          | \`${DMG_NAME}\` | \`${DMG_SHA}\` |
+
+          ### System Requirements
+
+          - macOS 14 (Sonoma) or later
+          - Apple Silicon or Intel Mac
+          CHECKSUMS
+
+          echo "notes_file=$NOTES_FILE" >> "$GITHUB_OUTPUT"
+
+      # ── Create GitHub Release ──────────────────────────────────────────────
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Download Organizer v${{ steps.version.outputs.version }}"
+          body_path: ${{ steps.notes.outputs.notes_file }}
+          draft: true
+          prerelease: false
+          files: |
+            build/releases/DownloadOrganizer-${{ steps.version.outputs.version }}.dmg
+            build/releases/appcast.xml
+            build/Download Organizer.zip
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Cleanup (PAID mode) ────────────────────────────────────────────────
+      - name: Cleanup keychain
+        if: always() && steps.signing.outputs.mode == 'developer-id'
+        run: |
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+          if [ -f "$KEYCHAIN_PATH" ]; then
+            security delete-keychain "$KEYCHAIN_PATH"
+          fi

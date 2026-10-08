@@ -1,0 +1,30 @@
+# XcodeGen output
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+
+# Build products
+.build/
+build/
+DerivedData/
+
+# Swift Package Manager
+.swiftpm/
+
+# macOS
+.DS_Store
+
+# ── Internal development docs (keep locally, not in public repo) ─────────
+# These are planning/architecture docs for the development team.
+# They contain implementation details not meant for end users.
+ARCHITECTURE.md
+CURSOR_PLAYBOOK.md
+DISTRIBUTION.md
+PRD.md
+TEST_PLAN.md
+docs/
+
+# ── Editor / tool config ─────────────────────────────────────────────────
+.cursor/
+.agents/
+.vscode/

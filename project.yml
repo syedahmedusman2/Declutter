@@ -1,0 +1,116 @@
+name: DownloadOrganizer
+
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+  developmentLanguage: en
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    ENABLE_HARDENED_RUNTIME: YES
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    # Keep these aligned with App/AppBranding.swift.
+    PRODUCT_BUNDLE_IDENTIFIER: com.example.downloadorganizer
+    APP_DISPLAY_NAME: Download Organizer
+
+configs:
+  Debug: debug
+  Release: release
+  Release-Direct: release     # GitHub/website DMG — includes Sparkle
+  Release-AppStore: release   # Mac App Store — no Sparkle
+
+packages:
+  DownloadOrganizerCore:
+    path: Packages/DownloadOrganizerCore
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    version: 2.7.0
+
+targets:
+  DownloadOrganizer:
+    type: application
+    platform: macOS
+    sources:
+      - path: App
+        excludes:
+          - Support/Info.plist
+          - Support/App.entitlements
+          - Support/App-Direct.entitlements
+    dependencies:
+      - package: DownloadOrganizerCore
+      - package: Sparkle
+        # Sparkle is linked in all configs but only enabled at runtime via
+        # SPARKLE_ENABLED build setting / compiler flag. The Release-AppStore
+        # config strips it via EXCLUDED_SOURCE_FILE_NAMES if desired, but
+        # linking it without calling it is harmless and simpler for XcodeGen.
+    settings:
+      base:
+        PRODUCT_NAME: $(APP_DISPLAY_NAME)
+        PRODUCT_MODULE_NAME: DownloadOrganizer
+        PRODUCT_BUNDLE_IDENTIFIER: $(PRODUCT_BUNDLE_IDENTIFIER)
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_FILE: App/Support/Info.plist
+        CODE_SIGN_ENTITLEMENTS: App/Support/App.entitlements
+        ENABLE_HARDENED_RUNTIME: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+        LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks
+        INFOPLIST_KEY_CFBundleDisplayName: $(APP_DISPLAY_NAME)
+        INFOPLIST_KEY_LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        # Sparkle auto-update support (keyed per config below)
+        SPARKLE_ENABLED: "0"
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited)
+      configs:
+        Release-Direct:
+          CODE_SIGN_ENTITLEMENTS: App/Support/App-Direct.entitlements
+          SPARKLE_ENABLED: "1"
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) SPARKLE_ENABLED
+        Release-AppStore:
+          # No Sparkle, no network entitlement
+          SPARKLE_ENABLED: "0"
+
+  DownloadOrganizerTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/DownloadOrganizerTests
+    dependencies:
+      - target: DownloadOrganizer
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.downloadorganizer.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/$(APP_DISPLAY_NAME).app/Contents/MacOS/$(APP_DISPLAY_NAME)"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: YES
+
+schemes:
+  DownloadOrganizer:
+    build:
+      targets:
+        DownloadOrganizer: all
+        DownloadOrganizerTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - DownloadOrganizerTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
