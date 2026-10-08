@@ -306,8 +306,10 @@ private final class MonitorRig {
             if condition() { return }
             if await clock.soonestWait() != nil {
                 await jumpToNextSleep()
+                if condition() { return }
             } else {
                 await Task.yield()
+                try? await Task.sleep(nanoseconds: 2_000_000)
             }
         }
     }
