@@ -36,7 +36,7 @@ final class ActivityViewModel {
 
     var days: [ActivityDay] {
         let calendar = Calendar.current
-        let filtered = items.filter(matches)
+        let filtered = items.filter { matches($0) }
         let grouped = Dictionary(grouping: filtered) { calendar.startOfDay(for: $0.createdAt) }
         return grouped.keys.sorted(by: >).map { day in
             ActivityDay(
