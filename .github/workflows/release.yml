@@ -221,7 +221,7 @@ jobs:
         with:
           name: "Declutter v${{ steps.version.outputs.version }}"
           body_path: ${{ steps.notes.outputs.notes_file }}
-          draft: true
+          draft: false
           prerelease: false
           files: |
             build/releases/Declutter-${{ steps.version.outputs.version }}.dmg
