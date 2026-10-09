@@ -43,19 +43,20 @@ Declutter runs quietly in the background or on demand to keep your workspaces pr
 
 ### Option 1: Direct Download (DMG)
 
-1. Head over to [**Latest Releases**](https://github.com/syedahmedusman2/Declutter/releases/latest).
-2. Download `Declutter-0.1.0.dmg`.
-3. Open the DMG and drag **Declutter** to your **Applications** folder.
-4. Launch **Declutter** from Applications or Spotlight.
+1. Download [**Declutter-0.1.0.dmg**](https://github.com/syedahmedusman2/Declutter/releases/latest).
+2. Double-click the downloaded file.
+3. If your Mac says Apple could not verify “Declutter”:
+   1. Click **Done**.
+   2. Click the Apple menu () in the top-left corner → **System Settings**.
+   3. Click **Privacy & Security**.
+   4. Scroll down until you see **“Declutter” was blocked**.
+   5. Click **Open Anyway**.
+   6. Use Touch ID, or type your Mac password, and click **Open Anyway** again.
+4. A window opens. Drag **Declutter** onto **Applications**.
+5. Open the **Applications** folder and double-click **Declutter**.
+6. If the same message appears, open **System Settings → Privacy & Security** again and click **Open Anyway**.
 
-> [!TIP]
-> **First-Launch Gatekeeper Notice (for Ad-Hoc Builds):**
-> Because this open-source build is distributed directly without a paid Apple Developer certificate, macOS Gatekeeper may show a verification prompt on first open.
-> - **Method A:** Right-click (or Control-click) **Declutter.app** → click **Open** → confirm **Open**.
-> - **Method B (Terminal):**
->   ```bash
->   xattr -dr com.apple.quarantine /Applications/Declutter.app
->   ```
+You only need to do this the first time. After that, open Declutter from Applications as usual.
 
 ---
 

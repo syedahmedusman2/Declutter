@@ -60,26 +60,33 @@ cat <<EOF
 ### Installation
 
 1. Download \`${DMG_NAME}\` (${DMG_SIZE})
-2. Open the DMG and drag **Declutter** to Applications
-3. Launch from Applications
+2. Double-click the downloaded file to open it
 EOF
 
 if [ "$SIGNING_MODE" = "developer-id" ]; then
   cat <<'EOF'
+3. Drag **Declutter** onto **Applications**
+4. Open the **Applications** folder and double-click **Declutter**
 
 This build is **signed with Developer ID** and **notarized by Apple**. macOS will open it without any warnings.
 EOF
 else
   cat <<'EOF'
-4. **First launch only** — macOS will show a Gatekeeper warning because the app is not notarized. Use one of these methods:
-   - **Right-click** (or Control-click) the app → **Open** → click **Open** again
-   - Or run in Terminal:
-     ```bash
-     xattr -dr com.apple.quarantine "/Applications/Declutter.app"
-     ```
+3. If your Mac says Apple could not verify “Declutter”:
+   1. Click **Done**
+   2. Click the Apple menu () in the top-left corner → **System Settings**
+   3. Click **Privacy & Security**
+   4. Scroll down until you see **“Declutter” was blocked**
+   5. Click **Open Anyway**
+   6. Use Touch ID, or type your Mac password, and click **Open Anyway** again
+4. A window opens. Drag **Declutter** onto **Applications**
+5. Open the **Applications** folder and double-click **Declutter**
+6. If the same message appears, go back to **Privacy & Security** and click **Open Anyway** again
+
+You only need to do this the first time. After that, open Declutter from Applications as usual.
 
 > [!NOTE]
-> This build is **ad-hoc signed** — it is not associated with a paid Apple Developer ID. This is safe for open-source software; the source code is available in this repository for verification.
+> This build is not notarized by Apple yet. That is normal for open-source software without a paid Apple Developer certificate. Declutter does not phone home — your files stay on your Mac.
 EOF
 fi
 
