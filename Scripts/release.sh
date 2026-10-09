@@ -250,36 +250,13 @@ if [ "$DO_GITHUB" = true ]; then
     exit 1
   fi
 
-  CHANGELOG=""
-  if [ -f "$ROOT/CHANGELOG.md" ]; then
-    # Extract the section for this version
-    CHANGELOG=$(awk "/^## .*${VERSION}/,/^## /" "$ROOT/CHANGELOG.md" | head -n -1)
-  fi
-
-  RELEASE_NOTES="## Declutter v${VERSION}
-
-### Installation
-
-1. Download \`${DMG_NAME}\` below
-2. Open the DMG and drag **Declutter** to your Applications folder
-3. Launch from Applications"
-
   if [ "$CODESIGN_IDENTITY" = "-" ]; then
-    RELEASE_NOTES+="
-4. **First launch**: Right-click the app → Open, or run:
-   \`\`\`bash
-   xattr -dr com.apple.quarantine /Applications/Declutter.app
-   \`\`\`
-
-> ⚠️ This build is ad-hoc signed (not notarized). macOS Gatekeeper will show a warning on first launch. Use the steps above to bypass it."
+    SIGNING_MODE="ad-hoc"
+  else
+    SIGNING_MODE="developer-id"
   fi
 
-  if [ -n "$CHANGELOG" ]; then
-    RELEASE_NOTES+="
-
-### Changes
-${CHANGELOG}"
-  fi
+  RELEASE_NOTES="$(bash "$ROOT/Scripts/render_release_notes.sh" "$VERSION" "$DMG_PATH" "$SIGNING_MODE")"
 
   RELEASE_FILES=("$DMG_PATH")
 

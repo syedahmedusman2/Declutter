@@ -206,69 +206,13 @@ jobs:
         id: notes
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          DMG_NAME="Declutter-${VERSION}.dmg"
-          DMG_PATH="build/releases/${DMG_NAME}"
-          DMG_SIZE=$(du -h "$DMG_PATH" | cut -f1)
-          DMG_SHA=$(shasum -a 256 "$DMG_PATH" | cut -d' ' -f1)
-
-          # Build release notes
+          DMG_PATH="build/releases/Declutter-${VERSION}.dmg"
           NOTES_FILE="$RUNNER_TEMP/release_notes.md"
-
-          cat > "$NOTES_FILE" <<'HEADER'
-          ## Declutter v${VERSION}
-
-          HEADER
-
-          # Trim leading whitespace from heredoc
-          sed -i '' 's/^          //' "$NOTES_FILE"
-
-          # Extract changelog if available
-          if [ -f CHANGELOG.md ]; then
-            awk "/^## .*${VERSION}/,/^## /" CHANGELOG.md | head -n -1 >> "$NOTES_FILE"
-            echo "" >> "$NOTES_FILE"
-          fi
-
-          cat >> "$NOTES_FILE" <<INSTALL
-          ### Installation
-
-          1. Download \`${DMG_NAME}\` (${DMG_SIZE})
-          2. Open the DMG and drag **Declutter** to Applications
-          3. Launch from Applications
-          INSTALL
-
-          if [ "${{ steps.signing.outputs.mode }}" = "ad-hoc" ]; then
-            cat >> "$NOTES_FILE" <<'ADHOC'
-          4. **First launch only** — macOS will show a Gatekeeper warning because the app is not notarized. Use one of these methods:
-             - **Right-click** (or Control-click) the app → **Open** → click **Open** again
-             - Or run in Terminal:
-               ```bash
-               xattr -dr com.apple.quarantine "/Applications/Declutter.app"
-               ```
-
-          > [!NOTE]
-          > This build is **ad-hoc signed** — it is not associated with a paid Apple Developer ID. This is safe for open-source software; the source code is available in this repository for verification.
-          ADHOC
-          else
-            cat >> "$NOTES_FILE" <<'SIGNED'
-
-          This build is **signed with Developer ID** and **notarized by Apple**. macOS will open it without any warnings.
-          SIGNED
-          fi
-
-          cat >> "$NOTES_FILE" <<CHECKSUMS
-
-          ### Checksums
-
-          | File | SHA-256 |
-          |------|---------|
-          | \`${DMG_NAME}\` | \`${DMG_SHA}\` |
-
-          ### System Requirements
-
-          - macOS 14 (Sonoma) or later
-          - Apple Silicon or Intel Mac
-          CHECKSUMS
-
+          bash Scripts/render_release_notes.sh \
+            "$VERSION" \
+            "$DMG_PATH" \
+            "${{ steps.signing.outputs.mode }}" \
+            > "$NOTES_FILE"
           echo "notes_file=$NOTES_FILE" >> "$GITHUB_OUTPUT"
 
       # ── Create GitHub Release ──────────────────────────────────────────────
