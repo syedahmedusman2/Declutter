@@ -81,6 +81,7 @@ struct RootView: View {
             }
         }
         .frame(minWidth: 920, minHeight: 560)
+        .preferredColorScheme(model.settings.colorScheme)
         .task {
             model.onOrganizeExisting = {
                 section = .preview

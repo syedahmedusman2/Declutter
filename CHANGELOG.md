@@ -7,7 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-XX-XX
+## [0.1.1] - 2026-10-11
+
+### Fixed
+- App freeze / beachball on first launch after allowing the download in Privacy & Security
+- Menu bar icon update loop that could peg the CPU and crash the app during scene setup
+
+### Changed
+- Settings writes now skip no-op updates to keep launch and background mode lighter
+
+## [0.1.0] - 2026-10-09
 
 ### Added
 - Initial release

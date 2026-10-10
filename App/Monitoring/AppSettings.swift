@@ -112,6 +112,7 @@ final class AppSettings {
     var menuBarVisible: Bool { policy.menuBarVisible }
 
     func setRunInBackground(_ enabled: Bool) {
+        guard enabled != runInBackground else { return }
         let result = policy.settingBackground(to: enabled)
         runInBackground = result.policy.runInBackground
         if result.loginTurnedOff {
@@ -119,15 +120,27 @@ final class AppSettings {
             try? login.setEnabled(false)
             notice = "Launch at Login was turned off because the app no longer stays open in the background."
         }
+        // Background mode always shows the menu bar icon.
+        if runInBackground && !showMenuBarIcon {
+            showMenuBarIcon = true
+        }
         persist()
     }
 
     func setShowMenuBarIcon(_ visible: Bool) {
         let next = policy.settingMenuBarIcon(to: visible)
-        showMenuBarIcon = next.showMenuBarIcon
+        // Background mode always keeps the menu bar icon. Ignore hide attempts without
+        // mutating @Observable state — SwiftUI MenuBarExtra was writing isInserted=false
+        // during scene updates, which rebuilt the App body in a tight loop and froze launch.
         if runInBackground && !visible {
-            notice = "The menu bar icon stays visible while the app runs in the background."
+            let message = "The menu bar icon stays visible while the app runs in the background."
+            if notice != message {
+                notice = message
+            }
+            return
         }
+        guard next.showMenuBarIcon != showMenuBarIcon else { return }
+        showMenuBarIcon = next.showMenuBarIcon
         persist()
     }
 
@@ -148,22 +161,26 @@ final class AppSettings {
     }
 
     func setShowInDock(_ visible: Bool) {
+        guard visible != showInDock else { return }
         showInDock = visible
         persist()
         applyDockIcon()
     }
 
     func setResumeMonitoringOnLaunch(_ enabled: Bool) {
+        guard enabled != resumeMonitoringOnLaunch else { return }
         resumeMonitoringOnLaunch = enabled
         persist()
     }
 
     func setAlwaysQuit(_ enabled: Bool) {
+        guard enabled != alwaysQuit else { return }
         alwaysQuit = enabled
         persist()
     }
 
     func setAutomationMode(_ mode: AutomationMode) {
+        guard mode != automationMode else { return }
         automationMode = mode
         persist()
     }
@@ -214,15 +231,25 @@ final class AppSettings {
         let enabled = login.isEnabled()
         if enabled && !runInBackground {
             try? login.setEnabled(false)
-            launchAtLogin = false
-            notice = "Launch at Login was turned off because the app no longer stays open in the background."
-        } else {
+            if launchAtLogin {
+                launchAtLogin = false
+            }
+            let message = "Launch at Login was turned off because the app no longer stays open in the background."
+            if notice != message {
+                notice = message
+            }
+        } else if launchAtLogin != enabled {
             launchAtLogin = enabled
         }
     }
 
     func applyDockIcon() {
-        NSApp.setActivationPolicy(showInDock ? .regular : .accessory)
+        let policy: NSApplication.ActivationPolicy = showInDock ? .regular : .accessory
+        // Defer so SwiftUI can finish installing WindowGroup / MenuBarExtra scenes first.
+        Task { @MainActor in
+            guard NSApp.activationPolicy() != policy else { return }
+            NSApp.setActivationPolicy(policy)
+        }
     }
 
     private func persist() {

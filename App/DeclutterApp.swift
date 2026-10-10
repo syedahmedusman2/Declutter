@@ -16,41 +16,59 @@ struct DeclutterApp: App {
     var body: some Scene {
         WindowGroup(id: AppWindow.organizer) {
             RootView(model: model)
-                .preferredColorScheme(model.settings.colorScheme)
         }
         .commands {
-            CommandGroup(replacing: .newItem) {
-                Button("New Category") { model.send(.newCategory) }
-                    .keyboardShortcut("n", modifiers: .command)
-            }
-            CommandGroup(after: .pasteboard) {
-                Button("Rescan") { model.send(.rescan) }
-                    .keyboardShortcut("r", modifiers: .command)
-                Button("Execute") { model.send(.execute) }
-                    .keyboardShortcut(.return, modifiers: .command)
-                Button("Search") { model.send(.focusSearch) }
-                    .keyboardShortcut("f", modifiers: .command)
-                Button("Pause or Resume") { model.send(.togglePause) }
-                    .keyboardShortcut("p", modifiers: [.command, .option])
-            }
-            CommandGroup(after: .undoRedo) {
-                Button("Undo Last Batch") { model.send(.undoLastBatch) }
-                    .keyboardShortcut("z", modifiers: .command)
-            }
+            OrganizerCommands(model: model)
         }
+
         MenuBarExtra(
             AppBranding.name,
             systemImage: "arrow.down.circle",
-            isInserted: Binding(
-                get: { model.settings.menuBarVisible },
-                set: { model.settings.setShowMenuBarIcon($0) }
-            )
+            isInserted: menuBarInserted
         ) {
             MenuBarView(model: model)
         }
         .menuBarExtraStyle(.window)
+
         Settings {
             SettingsView(model: model)
+        }
+    }
+
+    private var menuBarInserted: Binding<Bool> {
+        // While background mode is on, the icon cannot be removed. A constant binding
+        // prevents MenuBarExtra from writing isInserted during scene updates.
+        if model.settings.runInBackground {
+            return .constant(true)
+        }
+        return Binding(
+            get: { model.settings.showMenuBarIcon },
+            set: { model.settings.setShowMenuBarIcon($0) }
+        )
+    }
+}
+
+private struct OrganizerCommands: Commands {
+    var model: AppModel
+
+    var body: some Commands {
+        CommandGroup(replacing: .newItem) {
+            Button("New Category") { model.send(.newCategory) }
+                .keyboardShortcut("n", modifiers: .command)
+        }
+        CommandGroup(after: .pasteboard) {
+            Button("Rescan") { model.send(.rescan) }
+                .keyboardShortcut("r", modifiers: .command)
+            Button("Execute") { model.send(.execute) }
+                .keyboardShortcut(.return, modifiers: .command)
+            Button("Search") { model.send(.focusSearch) }
+                .keyboardShortcut("f", modifiers: .command)
+            Button("Pause or Resume") { model.send(.togglePause) }
+                .keyboardShortcut("p", modifiers: [.command, .option])
+        }
+        CommandGroup(after: .undoRedo) {
+            Button("Undo Last Batch") { model.send(.undoLastBatch) }
+                .keyboardShortcut("z", modifiers: .command)
         }
     }
 }

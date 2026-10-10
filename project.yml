@@ -16,8 +16,8 @@ settings:
     ENABLE_HARDENED_RUNTIME: YES
     CODE_SIGN_STYLE: Manual
     CODE_SIGN_IDENTITY: "-"
-    MARKETING_VERSION: "0.1.0"
-    CURRENT_PROJECT_VERSION: "1"
+    MARKETING_VERSION: "0.1.1"
+    CURRENT_PROJECT_VERSION: "2"
     # Keep these aligned with App/AppBranding.swift.
     PRODUCT_BUNDLE_IDENTIFIER: com.declutterapp.declutter
     APP_DISPLAY_NAME: Declutter

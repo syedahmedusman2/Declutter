@@ -43,7 +43,7 @@ Declutter runs quietly in the background or on demand to keep your workspaces pr
 
 ### Option 1: Direct Download (DMG)
 
-1. Download [**Declutter-0.1.0.dmg**](https://github.com/syedahmedusman2/Declutter/releases/latest).
+1. Download [**Declutter-0.1.1.dmg**](https://github.com/syedahmedusman2/Declutter/releases/latest).
 2. Double-click the downloaded file.
 3. If your Mac says Apple could not verify “Declutter”:
    1. Click **Done**.
